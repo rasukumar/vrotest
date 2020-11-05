@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:workflow xmlns:ns2="http://vmware.com/vco/workflow" root-name="item0" object-name="workflow:name=generic" id="07513d58-adb0-4211-9c1b-f755f999ae3e" editor-version="2.0" version="0.0.0" api-version="6.0.0" restartMode="1" resumeFromFailedMode="1">
+    <display-name>test prod workflow</display-name>
+    <position y="50.0" x="100.0"/>
+    <input/>
+    <output/>
+    <workflow-item name="item0" type="end" end-mode="0" comparator="0">
+        <in-binding/>
+        <out-binding/>
+        <position y="50.0" x="240.0"/>
+    </workflow-item>
+    <presentation/>
+</ns2:workflow>
