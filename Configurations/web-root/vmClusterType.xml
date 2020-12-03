@@ -1,0 +1,48 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<config-element id="9a1b432d-9efa-4aa1-85a3-82cf6e79fff6" version="0.0.0">
+  <display-name><![CDATA[vmClusterType]]></display-name>
+  <atts>
+    <att name="SHS_PROD" type="Array/string" read-only="false">
+      <value encoded="n"><![CDATA[[13:string#SHS DB,27:string#SHS Mission Critical,19:string#SHS Standard]]]></value>
+    </att>
+    <att name="NNA_NONPROD" type="Array/string" read-only="false">
+      <value encoded="n"><![CDATA[[19:string#NNA Standard]]]></value>
+    </att>
+    <att name="COMMON_PROD" type="Array/string" read-only="false">
+      <value encoded="n"><![CDATA[[18:string#Common Prod,28:string#Common Prod Stretched]]]></value>
+    </att>
+    <att name="NGEMR_PROD" type="Array/string" read-only="false">
+      <value encoded="n"><![CDATA[[22:string#NGEMR Cache ODB,15:string#NGEMR DB,16:string#NGEMR ECP,27:string#NGEMR Web & Services]]]></value>
+    </att>
+    <att name="INFRA_PROD" type="Array/string" read-only="false">
+      <value encoded="n"><![CDATA[[15:string#STRMGT01,15:string#STRMGT02]]]></value>
+    </att>
+    <att name="NNA_PROD" type="Array/string" read-only="false">
+      <value encoded="n"><![CDATA[[27:string#NNA Mission Critical,19:string#NNA Standard,13:string#NNA DB]]]></value>
+    </att>
+    <att name="SHS_NONPROD" type="Array/string" read-only="false">
+      <value encoded="n"><![CDATA[[19:string#SHS Standard]]]></value>
+    </att>
+    <att name="COMMON_NONPROD" type="Array/string" read-only="false">
+      <value encoded="n"><![CDATA[[22:string#Common Non Prod]]]></value>
+    </att>
+    <att name="INFRA_NONPROD" type="Array/string" read-only="false">
+      <value encoded="n"><![CDATA[[15:string#STRMGT01,15:string#STRMGT02]]]></value>
+    </att>
+    <att name="COMMON_ENZ" type="Array/string" read-only="false">
+      <value encoded="n"><![CDATA[[17:string#Common ENZ]]]></value>
+    </att>
+    <att name="NGEMR_NONPROD" type="Array/string" read-only="false">
+      <value encoded="n"><![CDATA[[21:string#NGEMR Non Prod]]]></value>
+    </att>
+    <att name="COMMON_DMZ" type="Array/string" read-only="false">
+      <value encoded="n"><![CDATA[[17:string#Common DMZ]]]></value>
+    </att>
+    <att name="NNA_DMZ" type="Array/string" read-only="false">
+      <value encoded="n"><![CDATA[[14:string#NNA DMZ]]]></value>
+    </att>
+    <att name="SHS_DMZ" type="Array/string" read-only="false">
+      <value encoded="n"><![CDATA[[14:string#SHS DMZ]]]></value>
+    </att>
+  </atts>
+</config-element>

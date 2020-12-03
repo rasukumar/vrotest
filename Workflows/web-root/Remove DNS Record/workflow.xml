@@ -1,0 +1,79 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<workflow xmlns="http://vmware.com/vco/workflow" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://vmware.com/vco/workflow http://vmware.com/vco/workflow/Workflow-v4.xsd" root-name="item1" object-name="workflow:name=generic" id="78279cfb-2878-4d33-a834-f238d8fb9888" version="0.0.0" api-version="6.0.0" allowed-operations="evf" editor-version="2.0" restartMode="1" resumeFromFailedMode="0">
+  <display-name><![CDATA[Remove DNS Record]]></display-name>
+  <position y="50.0" x="100.0"/>
+  <input>
+    <param name="vmName" type="string"/>
+    <param name="domain" type="string"/>
+  </input>
+  <attrib name="dUsername" type="string" read-only="false">
+    <value encoded="n"><![CDATA[Healthgrp\svchispvra01]]></value>
+  </attrib>
+  <attrib name="dPassword" type="SecureString" read-only="false">
+    <value encoded="n"><![CDATA[15BQ65T6BU66J75J64Y23Q24W32H33M6AZ66Z75S43R44Y66PAA96F0FZEA9AA17QE1BCCC8YDEBF690T40C20F1H39A33C7PD76BA57T56B55CDI4B2AB78JFC6F409J1D906FEK811F2B6JC2CFFC0GEBBA579H3B12084P837595BI33CD3CDY]]></value>
+  </attrib>
+  <attrib name="cmd" type="string" read-only="false">
+    <value encoded="n"><![CDATA[]]></value>
+  </attrib>
+  <attrib name="interactiveSession" type="boolean" read-only="false">
+    <value encoded="n"><![CDATA[false]]></value>
+  </attrib>
+  <attrib name="programPath" type="string" read-only="false">
+    <value encoded="n"><![CDATA[C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe]]></value>
+  </attrib>
+  <attrib name="workingDirectory" type="string" read-only="false">
+    <value encoded="n"><![CDATA[]]></value>
+  </attrib>
+  <attrib name="environment" type="Array/string" read-only="false">
+    <value encoded="n"><![CDATA[#{##}#]]></value>
+  </attrib>
+  <attrib name="result" type="number" read-only="false">
+    <value encoded="n"><![CDATA[]]></value>
+  </attrib>
+  <attrib name="adVm" type="VC:VirtualMachine" read-only="false">
+    <value encoded="n"><![CDATA[dunes://service.dunes.ch/CustomSDKObject?id='HISVCSVPSYS03.hcloud.healthgrp.com.sg%2Cid:vm-2065624'&dunesName='VC:VirtualMachine']]></value>
+  </attrib>
+  <workflow-item name="item0" type="end" end-mode="0">
+    <position y="50.0" x="440.0"/>
+  </workflow-item>
+  <workflow-item name="item1" out-name="item2" type="task">
+    <display-name><![CDATA[Read input]]></display-name>
+    <script encoded="false"><![CDATA[var arg = "\"dnscmd /RecordDelete "+domain+" "+vmName+" A /f\""
+cmd = "cmd /c "+arg
+
+//cmd = "cmd.exe /c "
+
+System.log(cmd)
+]]></script>
+    <in-binding>
+      <bind name="domain" type="string" export-name="domain"/>
+      <bind name="dUsername" type="string" export-name="dUsername"/>
+      <bind name="dPassword" type="SecureString" export-name="dPassword"/>
+      <bind name="vmName" type="string" export-name="vmName"/>
+    </in-binding>
+    <out-binding>
+      <bind name="cmd" type="string" export-name="cmd"/>
+    </out-binding>
+    <description><![CDATA[Simple task with custom script capability.]]></description>
+    <position y="40.0" x="202.0"/>
+  </workflow-item>
+  <workflow-item name="item2" out-name="item0" type="link" linked-workflow-id="C98080808080808080808080808080805E80808001322751030482b80adf61e7c">
+    <display-name><![CDATA[Workflow element]]></display-name>
+    <in-binding>
+      <bind name="vmUsername" type="string" export-name="dUsername"/>
+      <bind name="vmPassword" type="SecureString" export-name="dPassword"/>
+      <bind name="vm" type="VC:VirtualMachine" export-name="adVm"/>
+      <bind name="interactiveSession" type="boolean" export-name="interactiveSession"/>
+      <bind name="programPath" type="string" export-name="programPath"/>
+      <bind name="arguments" type="string" export-name="cmd"/>
+      <bind name="workingDirectory" type="string" export-name="workingDirectory"/>
+      <bind name="environment" type="Array/string" export-name="environment"/>
+    </in-binding>
+    <out-binding>
+      <bind name="result" type="number" export-name="result"/>
+    </out-binding>
+    <description><![CDATA[ ]]></description>
+    <position y="50.0" x="320.0"/>
+  </workflow-item>
+  <presentation/>
+</workflow>

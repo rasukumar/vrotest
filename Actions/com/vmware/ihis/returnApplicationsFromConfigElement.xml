@@ -1,0 +1,18 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dunes-script-module name="returnApplicationsFromConfigElement" result-type="Array/string" api-version="6.0.0" id="5a645463-fdc8-4791-9b21-4ee52152173d" version="0.0.0" allowed-operations="vfe" category-name="com.vmware.ihis">
+  <script encoded="false"><![CDATA[
+var resources = Server.findAllForType("ResourceElement","name='ApplicationsList.txt'")
+
+var appList = new Array()
+//get the content from the ResourceElement as a Mime attachment type
+var contentMime = resources[0].getContentAsMimeAttachment();
+//get the contents from the Mime attachment
+var contentText = contentMime.content
+System.log(contentText)
+//split the contents (text file) in lines and store in an array
+appList = contentText.split(/\r\n|\r|\n/); 
+appList.sort();
+return appList 
+ 
+]]></script>
+</dunes-script-module>

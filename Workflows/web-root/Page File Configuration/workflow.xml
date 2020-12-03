@@ -1,0 +1,337 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<workflow xmlns="http://vmware.com/vco/workflow" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://vmware.com/vco/workflow http://vmware.com/vco/workflow/Workflow-v4.xsd" root-name="item16" object-name="workflow:name=generic" id="3d68c893-ccac-4c24-ae5e-7e7f0c84ce38" version="0.0.0" api-version="6.0.0" allowed-operations="vfe" editor-version="2.0" restartMode="1" resumeFromFailedMode="0">
+  <display-name><![CDATA[Page File Configuration]]></display-name>
+  <position y="1.05263157894737" x="22.10526315789474"/>
+  <input>
+    <param name="inputProperties" type="Properties"/>
+  </input>
+  <attrib name="interactiveSession" type="boolean" read-only="false">
+    <value encoded="n"><![CDATA[false]]></value>
+  </attrib>
+  <attrib name="workingDirectory" type="string" read-only="false">
+    <value encoded="n"><![CDATA[]]></value>
+  </attrib>
+  <attrib name="environment" type="Array/string" read-only="false">
+    <value encoded="n"><![CDATA[#{##}#]]></value>
+  </attrib>
+  <attrib name="programPath" type="string" read-only="false">
+    <value encoded="n"><![CDATA[C:\Windows\System32\cmd.exe]]></value>
+  </attrib>
+  <attrib name="vmPassword" type="SecureString" read-only="false" conf-id="37abddc7-c093-4fed-857b-38273fe27da5" conf-key="vmLocalPassword"/>
+  <attrib name="vmUsername" type="string" read-only="false" conf-id="37abddc7-c093-4fed-857b-38273fe27da5" conf-key="vmLocalUsername">
+    <value encoded="n"><![CDATA[]]></value>
+  </attrib>
+  <attrib name="arguments" type="Array/string" read-only="false">
+    <value encoded="n"><![CDATA[#{##}#]]></value>
+  </attrib>
+  <attrib name="result" type="Array/number" read-only="false">
+    <value encoded="n"><![CDATA[#{##}#]]></value>
+  </attrib>
+  <attrib name="wfRPIG" type="Workflow" read-only="false">
+    <value encoded="n"><![CDATA[dunes://service.dunes.ch/Workflow?id='C98080808080808080808080808080805E80808001322751030482b80adf61e7c'&dunesName='Workflow']]></value>
+  </attrib>
+  <attrib name="counter" type="number" read-only="false">
+    <value encoded="n"><![CDATA[1.0]]></value>
+  </attrib>
+  <attrib name="wfAddHD" type="Workflow" read-only="false">
+    <value encoded="n"><![CDATA[dunes://service.dunes.ch/Workflow?id='93f2ca68-9018-416e-80d2-6e2a7e7991b1'&dunesName='Workflow']]></value>
+  </attrib>
+  <attrib name="scriptVariables" type="Array/CompositeType(stringToReplace:string,replacingString:string):scriptVariables" read-only="false">
+    <value encoded="n"><![CDATA[#{##}#]]></value>
+  </attrib>
+  <attrib name="scriptConfigurationResource" type="ResourceElement" read-only="false">
+    <value encoded="n"><![CDATA[dunes://service.dunes.ch/ResourceElement?id='8b76b083-261d-47d9-9c02-0303526a7c06'&dunesName='ResourceElement']]></value>
+  </attrib>
+  <attrib name="scriptExitCodeOut" type="number" read-only="false">
+    <value encoded="n"><![CDATA[]]></value>
+  </attrib>
+  <attrib name="scriptOutputTextOut" type="string" read-only="false">
+    <value encoded="n"><![CDATA[]]></value>
+  </attrib>
+  <attrib name="wfRunScriptnVmGuest" type="Workflow" read-only="false">
+    <value encoded="n"><![CDATA[dunes://service.dunes.ch/Workflow?id='24c23d4c-12be-4889-aa66-29b8a450f1cd'&dunesName='Workflow']]></value>
+  </attrib>
+  <attrib name="driveLetter" type="string" read-only="false">
+    <value encoded="n"><![CDATA[]]></value>
+  </attrib>
+  <attrib name="driveLetters" type="Array/string" read-only="false">
+    <value encoded="n"><![CDATA[#{##}#]]></value>
+  </attrib>
+  <attrib name="vm" type="VC:VirtualMachine" read-only="false">
+    <value encoded="n"><![CDATA[]]></value>
+  </attrib>
+  <attrib name="memoryGB" type="number" read-only="false">
+    <value encoded="n"><![CDATA[]]></value>
+  </attrib>
+  <workflow-item name="item0" type="end" end-mode="0">
+    <position y="39.32203615105612" x="661.9618052986114"/>
+  </workflow-item>
+  <workflow-item name="item2" out-name="item4" type="custom-condition" alt-out-name="item7">
+    <display-name><![CDATA[memory < 16]]></display-name>
+    <script encoded="false"><![CDATA[
+
+if(memoryGB <= 16){
+    System.log("Configuring page file on existing disk.....")
+    return true
+} 
+else {
+    System.log("Creating new disk to configure page file.....")
+    return false
+}
+]]></script>
+    <in-binding>
+      <bind name="memoryGB" type="number" export-name="memoryGB"/>
+    </in-binding>
+    <out-binding/>
+    <description><![CDATA[Custom decision based on a custom script.]]></description>
+    <position y="43.15789473684211" x="192.63157894736844"/>
+  </workflow-item>
+  <workflow-item name="item4" out-name="item5" type="task">
+    <display-name><![CDATA[Set page file on existing drive]]></display-name>
+    <script encoded="false"><![CDATA[
+arguments = new Array()
+var min = (memoryGB * 1.5) * 1024
+var max =  (memoryGB * 1.5) * 1024
+var cmd = ""
+
+cmd = "/c wmic computersystem set AutomaticManagedPagefile=FALSE"
+arguments.push(cmd)
+
+//cmd = " /c wmic pagefileset where name=\""+driveLetter+":\\\\pagefile.sys\" set InitialSize="+min+",MaximumSize="+max
+cmd = " /c wmic pagefileset where name=\"c:\\\\pagefile.sys\" set InitialSize="+min+",MaximumSize="+max
+//cmd = "cmd.exe /c \"wmic pagefileset where name=\"c:\\\\pagefile.sys\" set InitialSize="+min+",MaximumSize="+max+" > c:\\output.txt\""
+
+arguments.push(cmd) ]]></script>
+    <in-binding>
+      <bind name="memoryGB" type="number" export-name="memoryGB"/>
+    </in-binding>
+    <out-binding>
+      <bind name="arguments" type="Array/string" export-name="arguments"/>
+    </out-binding>
+    <description><![CDATA[Simple task with custom script capability.]]></description>
+    <position y="63.184210526315795" x="314.89473684210526"/>
+  </workflow-item>
+  <workflow-item name="item5" out-name="item0" type="task">
+    <display-name><![CDATA[run program in guest]]></display-name>
+    <script encoded="false"><![CDATA[
+
+var inputs,currentToken =""
+
+for each(var arg in arguments) {
+    System.log("cmd : "+arg)
+    inputs = new Properties()
+    inputs.put("interactiveSession",interactiveSession)
+    inputs.put("workingDirectory",workingDirectory)
+    inputs.put("environment",environment)
+    inputs.put("programPath",programPath)
+    inputs.put("vmPassword",vmPassword)
+    inputs.put("vmUsername",vmUsername)
+    inputs.put("arguments",arg)
+    inputs.put("vm",vm)
+    currentToken = wfRPIG.execute(inputs)
+   // System.sleep(15 * 1000)
+   System.getModule("com.vmware.ihis").wfState(currentToken);
+}
+]]></script>
+    <in-binding>
+      <bind name="arguments" type="Array/string" export-name="arguments"/>
+      <bind name="interactiveSession" type="boolean" export-name="interactiveSession"/>
+      <bind name="workingDirectory" type="string" export-name="workingDirectory"/>
+      <bind name="environment" type="Array/string" export-name="environment"/>
+      <bind name="programPath" type="string" export-name="programPath"/>
+      <bind name="vmPassword" type="SecureString" export-name="vmPassword"/>
+      <bind name="vmUsername" type="string" export-name="vmUsername"/>
+      <bind name="wfRPIG" type="Workflow" export-name="wfRPIG"/>
+      <bind name="vm" type="VC:VirtualMachine" export-name="vm"/>
+    </in-binding>
+    <out-binding>
+      <bind name="result" type="Array/number" export-name="result"/>
+    </out-binding>
+    <description><![CDATA[Simple task with custom script capability.]]></description>
+    <position y="53.15789473684211" x="445.2631578947369"/>
+  </workflow-item>
+  <workflow-item name="item7" out-name="item10" type="custom-condition" alt-out-name="item8">
+    <display-name><![CDATA[Validate tools status]]></display-name>
+    <script encoded="false"><![CDATA[System.log("VC VM: "+vm)
+System.log("VC VM name: "+vm.name)
+
+var toolStatus = vm.guest.toolsStatus.value;
+if(String(toolStatus) == "toolsOk" || (String(toolStatus) == "toolsOld"))
+return true;
+else
+return false; ]]></script>
+    <in-binding>
+      <bind name="vm" type="VC:VirtualMachine" export-name="vm"/>
+    </in-binding>
+    <out-binding/>
+    <description><![CDATA[Custom decision based on a custom script.]]></description>
+    <position y="116.84210526315789" x="66.31578947368422"/>
+  </workflow-item>
+  <workflow-item name="item8" out-name="item9" type="task">
+    <display-name><![CDATA[Error message]]></display-name>
+    <script encoded="false"><![CDATA[
+var errorMessage = "VMware Tools are not running";
+System.error("[Error::] "+ errorMessage); ]]></script>
+    <in-binding/>
+    <out-binding/>
+    <description><![CDATA[Simple task with custom script capability.]]></description>
+    <position y="179.47368421052633" x="129.47368421052633"/>
+  </workflow-item>
+  <workflow-item name="item9" prototype-id="increase-counter" out-name="item7" content-mode="x" type="task">
+    <display-name><![CDATA[Increase counter]]></display-name>
+    <script encoded="false"><![CDATA[//Auto-generated script
+counter = counter + 1;]]></script>
+    <in-binding>
+      <bind name="counter" type="number" export-name="counter">
+        <description><![CDATA[Item to increase]]></description>
+      </bind>
+    </in-binding>
+    <out-binding>
+      <bind name="counter" type="number" export-name="counter">
+        <description><![CDATA[Increased item]]></description>
+      </bind>
+    </out-binding>
+    <description><![CDATA[Increment a counter by one.]]></description>
+    <position y="190.0" x="3.1578947368421098"/>
+  </workflow-item>
+  <workflow-item name="item10" out-name="item11" type="task">
+    <display-name><![CDATA[Add disk]]></display-name>
+    <script encoded="false"><![CDATA[
+var inputs = new Properties()
+var token = ""
+
+inputs.put("vm",vm)
+inputs.put("diskSize",memoryGB)
+token = wfAddHD.execute(inputs)
+System.getModule("org.VMware.PSO").wfstate(token)]]></script>
+    <in-binding>
+      <bind name="vm" type="VC:VirtualMachine" export-name="vm"/>
+      <bind name="memoryGB" type="number" export-name="memoryGB"/>
+      <bind name="wfAddHD" type="Workflow" export-name="wfAddHD"/>
+    </in-binding>
+    <out-binding/>
+    <description><![CDATA[Simple task with custom script capability.]]></description>
+    <position y="126.84210526315789" x="171.57894736842107"/>
+  </workflow-item>
+  <workflow-item name="item11" out-name="item13" type="task">
+    <display-name><![CDATA[Set script variables]]></display-name>
+    <script encoded="false"><![CDATA[
+/*
+var driveLetters = new Array()
+driveLetters.push("s")
+var driveLabels = new Array()
+driveLabels.push("SwapDisk")
+
+var driveLettersStr = driveLetters.toString()
+var driveLabelsStr = driveLabels.toString()
+//System.log()
+*/
+var driveLettersStr = '"y"'
+var driveLabelsStr = '"SwapDisk"'
+
+scriptVariables = new Array();
+scriptVariables = System.getModule("com.vmware.coe.copyAndRunScriptsInGuest").addScriptVariableToArrayOfScriptVariables(scriptVariables,"[driveLetter]",driveLettersStr);
+scriptVariables = System.getModule("com.vmware.coe.copyAndRunScriptsInGuest").addScriptVariableToArrayOfScriptVariables(scriptVariables,"[driveLabel]",driveLabelsStr);
+System.log("scriptVariables: "+ scriptVariables[0].get("replacingString"))
+System.log("scriptVariables: "+ scriptVariables[1].get("replacingString"))
+ 
+ 
+]]></script>
+    <in-binding/>
+    <out-binding>
+      <bind name="scriptVariables" type="Array/CompositeType(stringToReplace:string,replacingString:string):scriptVariables" export-name="scriptVariables"/>
+    </out-binding>
+    <description><![CDATA[Simple task with custom script capability.]]></description>
+    <position y="120.0" x="245.0"/>
+  </workflow-item>
+  <workflow-item name="item13" out-name="item15" type="task">
+    <display-name><![CDATA[Format disk]]></display-name>
+    <script encoded="false"><![CDATA[
+
+var inputs,currentToken =""
+inputs = new Properties()
+inputs.put("vm",vm)
+inputs.put("vmUsername",vmUsername)
+inputs.put("vmPassword",vmPassword)
+inputs.put("scriptVariables",scriptVariables)
+inputs.put("scriptConfigurationResource",scriptConfigurationResource)
+currentToken = wfRunScriptnVmGuest.execute(inputs)
+// System.sleep(15 * 1000)
+System.getModule("com.vmware.ihis").wfState(currentToken);
+]]></script>
+    <in-binding>
+      <bind name="vm" type="VC:VirtualMachine" export-name="vm"/>
+      <bind name="vmUsername" type="string" export-name="vmUsername"/>
+      <bind name="vmPassword" type="SecureString" export-name="vmPassword"/>
+      <bind name="scriptVariables" type="Array/CompositeType(stringToReplace:string,replacingString:string):scriptVariables" export-name="scriptVariables"/>
+      <bind name="scriptConfigurationResource" type="ResourceElement" export-name="scriptConfigurationResource"/>
+      <bind name="wfRunScriptnVmGuest" type="Workflow" export-name="wfRunScriptnVmGuest"/>
+    </in-binding>
+    <out-binding>
+      <bind name="scriptExitCodeOut" type="number" export-name="scriptExitCodeOut"/>
+      <bind name="scriptOutputTextOut" type="string" export-name="scriptOutputTextOut"/>
+    </out-binding>
+    <description><![CDATA[Simple task with custom script capability.]]></description>
+    <position y="126.84210526315789" x="409.2631578947369"/>
+  </workflow-item>
+  <workflow-item name="item15" out-name="item5" type="task">
+    <display-name><![CDATA[Set page file on new disk]]></display-name>
+    <script encoded="false"><![CDATA[
+
+
+arguments = new Array()
+var min = (memoryGB - 5) * 1024
+var max =  (memoryGB - 5) * 1024
+var cmd = ""
+
+cmd = "/c wmic computersystem set AutomaticManagedPagefile=FALSE"
+arguments.push(cmd)
+
+cmd = " /c wmic pagefileset where name=\"c:\\\\pagefile.sys\" set InitialSize=6144,MaximumSize=6144"
+arguments.push(cmd)
+
+cmd = " /c wmic pagefileset create name=\"y:\\pagefile.sys\""
+arguments.push(cmd)
+
+//cmd = " /c wmic pagefileset where name=\""+driveLetter+":\\\\pagefile.sys\" set InitialSize="+min+",MaximumSize="+max
+cmd = " /c wmic pagefileset where name=\"y:\\\\pagefile.sys\" set InitialSize="+min+",MaximumSize="+max
+arguments.push(cmd) ]]></script>
+    <in-binding>
+      <bind name="memoryGB" type="number" export-name="memoryGB"/>
+    </in-binding>
+    <out-binding>
+      <bind name="arguments" type="Array/string" export-name="arguments"/>
+    </out-binding>
+    <description><![CDATA[Simple task with custom script capability.]]></description>
+    <position y="130.0" x="540.0"/>
+  </workflow-item>
+  <workflow-item name="item16" out-name="item2" type="task">
+    <display-name><![CDATA[Read from payload]]></display-name>
+    <script encoded="false"><![CDATA[
+
+var jsontxt = JSON.stringify(inputProperties, null, 2)
+System.log("jsontxt: " +jsontxt)
+var json = JSON.parse(jsontxt)
+System.log("parsed jsontxt: "+json)
+var vmName = json.resourceNames[0]
+System.log("vm name: "+vmName)
+var ipAddress = json.addresses[0][0]
+System.log("IP Address: "+ipAddress)
+
+var custProp = inputProperties.get('customProperties')
+memoryGB = custProp.get('memory')
+System.log("Memory in GB: "+ memoryGB)
+
+vm =  System.getModule("com.vmware.ihis").getVmFromVcenterByName(vmName);]]></script>
+    <in-binding>
+      <bind name="inputProperties" type="Properties" export-name="inputProperties"/>
+    </in-binding>
+    <out-binding>
+      <bind name="vm" type="VC:VirtualMachine" export-name="vm"/>
+      <bind name="memoryGB" type="number" export-name="memoryGB"/>
+    </out-binding>
+    <description><![CDATA[Simple task with custom script capability.]]></description>
+    <position y="53.15789473684211" x="75.31578947368422"/>
+  </workflow-item>
+  <presentation/>
+</workflow>

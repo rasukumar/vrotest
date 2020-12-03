@@ -1,0 +1,30 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<config-element id="0589b895-335f-48d0-9f7f-3990281cf23f" version="0.0.0">
+  <display-name><![CDATA[ouSelectionAic]]></display-name>
+  <atts>
+    <att name="AicWindows2008Prod" type="string" read-only="false">
+      <value encoded="n"><![CDATA[OU=Windows2008,OU=Production,OU=Hardened,OU=Hcloud,DC=aic,DC=local]]></value>
+    </att>
+    <att name="AicWindows2008NonProd" type="string" read-only="false">
+      <value encoded="n"><![CDATA[OU=Windows2008,OU=Staging,OU=Hardened,OU=Hcloud,DC=aic,DC=local]]></value>
+    </att>
+    <att name="AicWindows2012NonProd" type="string" read-only="false">
+      <value encoded="n"><![CDATA[OU=Windows2012,OU=Staging,OU=Hardened,OU=Hcloud,DC=aic,DC=local]]></value>
+    </att>
+    <att name="AicWindows2012Prod" type="string" read-only="false">
+      <value encoded="n"><![CDATA[OU=Windows2012,OU=Production,OU=Hardened,OU=Hcloud,DC=aic,DC=local]]></value>
+    </att>
+    <att name="AicWindows2016NonProd" type="string" read-only="false">
+      <value encoded="n"><![CDATA[OU=Windows2016,OU=Staging,OU=Hardened,OU=Hcloud,DC=aic,DC=local]]></value>
+    </att>
+    <att name="AicWindows2016Prod" type="string" read-only="false">
+      <value encoded="n"><![CDATA[OU=Windows2016,OU=Production,OU=Hardened,OU=Hcloud,DC=aic,DC=local]]></value>
+    </att>
+    <att name="AicWindows2019NonProd" type="string" read-only="false">
+      <value encoded="n"><![CDATA[OU=Windows2019,OU=Staging,OU=Hardened,OU=Hcloud,DC=aic,DC=local]]></value>
+    </att>
+    <att name="AicWindows2019Prod" type="string" read-only="false">
+      <value encoded="n"><![CDATA[OU=Windows2019,OU=Production,OU=Hardened,OU=Hcloud,DC=aic,DC=local]]></value>
+    </att>
+  </atts>
+</config-element>

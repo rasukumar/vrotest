@@ -1,0 +1,215 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<workflow xmlns="http://vmware.com/vco/workflow" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://vmware.com/vco/workflow http://vmware.com/vco/workflow/Workflow-v4.xsd" root-name="item1" object-name="workflow:name=generic" id="6c042afb-66e4-4be8-a6ad-52789e8d28db" version="0.0.0" api-version="6.0.0" allowed-operations="evf" editor-version="2.0" restartMode="1" resumeFromFailedMode="0">
+  <display-name><![CDATA[Activate Windows License Through VAMT]]></display-name>
+  <position y="10.0" x="40.0"/>
+  <input>
+    <param name="inputProperties" type="Properties"/>
+  </input>
+  <attrib name="vmUsername" type="string" read-only="false" conf-id="37abddc7-c093-4fed-857b-38273fe27da5" conf-key="vmLocalUsername">
+    <value encoded="n"><![CDATA[]]></value>
+  </attrib>
+  <attrib name="vmPassword" type="SecureString" read-only="false" conf-id="37abddc7-c093-4fed-857b-38273fe27da5" conf-key="vmLocalPassword"/>
+  <attrib name="interactiveSession" type="boolean" read-only="false">
+    <value encoded="n"><![CDATA[false]]></value>
+  </attrib>
+  <attrib name="programPath" type="string" read-only="false">
+    <value encoded="n"><![CDATA[C:\Windows\System32\cmd.exe]]></value>
+  </attrib>
+  <attrib name="workingDirectory" type="string" read-only="false">
+    <value encoded="n"><![CDATA[E:\vRA]]></value>
+  </attrib>
+  <attrib name="environment" type="Array/string" read-only="false">
+    <value encoded="n"><![CDATA[#{##}#]]></value>
+  </attrib>
+  <attrib name="result" type="number" read-only="false">
+    <value encoded="n"><![CDATA[]]></value>
+  </attrib>
+  <attrib name="wfRunProgramInGuest" type="Workflow" read-only="false">
+    <value encoded="n"><![CDATA[dunes://service.dunes.ch/Workflow?id='C98080808080808080808080808080805E80808001322751030482b80adf61e7c'&dunesName='Workflow']]></value>
+  </attrib>
+  <attrib name="vamtVm" type="VC:VirtualMachine" read-only="false" conf-id="37abddc7-c093-4fed-857b-38273fe27da5" conf-key="vamtVm"/>
+  <attrib name="counter" type="number" read-only="false">
+    <value encoded="n"><![CDATA[1.0]]></value>
+  </attrib>
+  <attrib name="blueprintType" type="string" read-only="false">
+    <value encoded="n"><![CDATA[]]></value>
+  </attrib>
+  <attrib name="ipAddress" type="string" read-only="false">
+    <value encoded="n"><![CDATA[]]></value>
+  </attrib>
+  <attrib name="cmd" type="string" read-only="false">
+    <value encoded="n"><![CDATA[]]></value>
+  </attrib>
+  <attrib name="vamtScript" type="ResourceElement" read-only="false">
+    <value encoded="n"><![CDATA[]]></value>
+  </attrib>
+  <attrib name="keyDescription" type="string" read-only="false">
+    <value encoded="n"><![CDATA[]]></value>
+  </attrib>
+  <attrib name="vamtVmPwd_1" type="SecureString" read-only="false" conf-id="37abddc7-c093-4fed-857b-38273fe27da5" conf-key="vamtPassword"/>
+  <attrib name="vamtVmUser_1" type="string" read-only="false" conf-id="37abddc7-c093-4fed-857b-38273fe27da5" conf-key="vamtUsername">
+    <value encoded="n"><![CDATA[]]></value>
+  </attrib>
+  <attrib name="vmName" type="string" read-only="false">
+    <value encoded="n"><![CDATA[]]></value>
+  </attrib>
+  <workflow-item name="item0" type="end" end-mode="0">
+    <position y="55.00615362624329" x="749.6232925379355"/>
+  </workflow-item>
+  <workflow-item name="item1" out-name="item7" type="task">
+    <display-name><![CDATA[Read from payload]]></display-name>
+    <script encoded="false"><![CDATA[
+var jsontxt = JSON.stringify(inputProperties, null, 2)
+System.log("jsontxt: " +jsontxt)
+var json = JSON.parse(jsontxt)
+System.log("parsed jsontxt: "+json)
+vmName = json.resourceNames[0]
+System.log("vm name: "+vmName)
+
+vm = System.getModule("com.vmware.ihis").getVmFromVcenterByName(vmName);
+ipAddress = System.getModule("com.vmware.ihis").getPrimaryIP(vm);
+System.log("IP Address: "+ipAddress)
+
+var custProp = inputProperties.get('customProperties')
+bpType = custProp.get('bpType')
+System.log("Blueprint type: "+ bpType)
+
+//ipAddress = "10.238.16.9"
+//var blueprintType = "Windows2016DC"
+
+keyDescription = System.getModule("com.vmware.ihis").readConfigElementValues(bpType,"WindowsKeyDescription","web-root");
+System.log("Key Description: "+keyDescription)]]></script>
+    <in-binding>
+      <bind name="inputProperties" type="Properties" export-name="inputProperties"/>
+    </in-binding>
+    <out-binding>
+      <bind name="ipAddress" type="string" export-name="ipAddress"/>
+      <bind name="keyDescription" type="string" export-name="keyDescription"/>
+      <bind name="vmName" type="string" export-name="vmName"/>
+    </out-binding>
+    <description><![CDATA[Simple task with custom script capability.]]></description>
+    <position y="20.0" x="140.0"/>
+  </workflow-item>
+  <workflow-item name="item2" out-name="item0" type="task">
+    <display-name><![CDATA[Run program In Guest]]></display-name>
+    <script encoded="false"><![CDATA[
+
+
+var inputs,currentToken =""
+
+    System.log("cmd: "+cmd)
+    inputs = new Properties()
+    inputs.put("interactiveSession",interactiveSession)
+    inputs.put("workingDirectory",workingDirectory)
+    inputs.put("environment",environment)
+    inputs.put("programPath",programPath)
+    inputs.put("vmPassword",vmPassword)
+    inputs.put("vmUsername",vmUsername)
+    inputs.put("arguments",cmd)
+    inputs.put("vm",vm)
+    currentToken = wfRunProgramInGuest.execute(inputs)
+   // System.sleep(15 * 1000)
+   System.getModule("com.vmware.ihis").wfState(currentToken);
+]]></script>
+    <in-binding>
+      <bind name="cmd" type="string" export-name="cmd"/>
+      <bind name="vmUsername" type="string" export-name="vamtVmUser_1"/>
+      <bind name="vmPassword" type="SecureString" export-name="vamtVmPwd_1"/>
+      <bind name="interactiveSession" type="boolean" export-name="interactiveSession"/>
+      <bind name="programPath" type="string" export-name="programPath"/>
+      <bind name="workingDirectory" type="string" export-name="workingDirectory"/>
+      <bind name="environment" type="Array/string" export-name="environment"/>
+      <bind name="wfRunProgramInGuest" type="Workflow" export-name="wfRunProgramInGuest"/>
+      <bind name="vm" type="VC:VirtualMachine" export-name="vamtVm"/>
+    </in-binding>
+    <out-binding>
+      <bind name="result" type="number" export-name="result"/>
+    </out-binding>
+    <description><![CDATA[Simple task with custom script capability.]]></description>
+    <position y="50.0" x="580.0"/>
+  </workflow-item>
+  <workflow-item name="item3" out-name="item2" type="task">
+    <display-name><![CDATA[Set command]]></display-name>
+    <script encoded="false"><![CDATA[
+cmd = " /c c:\\windows\\syswow64\\WindowsPowerShell\\v1.0\\powershell.exe -Command E:\\vRAVAMTOutput\\psScript\\VAMTActivation.ps1 {\""+keyDescription+"\"} \""+vmName+"\" \""+ipAddress+"\" \""+vmUsername+ "\" \""+vmPassword+"\" \""+vamtVmUser_1+ "\" \""+vamtVmPwd_1+"\""
+//cmd = " /c c:\\windows\\syswow64\\WindowsPowerShell\\v1.0\\powershell.exe -Command E:\\vRAVAMTOutput\\psScript\\VAMTActivation.ps1 {\""+keyDescription+"\"} \""+vmName+"\" \""+ipAddress+"\" \""+vmUsername+ "\" \""+vmPassword+"\" \""+vamtVmUser_1+ "\" \""+vamtVmPwd_1+"\" > E:\\VAMTTest\\output.txt" 
+System.log("Command : "+cmd)
+
+/*
+var cmd01 = "E:\\vRA\\VAMTActivation.ps1 \'" + keyDescription + "\' \'" + ipAddress + "\' \'" + vmUsername + "\' \'" + vmPassword + "\' | Out-File E:\\vRA\\output.txt"
+var path = "C:\\Windows\\SysWOW64\\WindowsPowerShell\\v1.0\\powershell.exe"
+var result = "> E:\\vRA\\output.txt"
+*/
+
+/*
+var cmd01 = "E:\\VAMTTest\\VAMTActivation.ps1"
+var params = "\'" + keyDescription + "\' \'" + ipAddress + "\' \'" + vmUsername + "\' \'" + vmPassword + "\'"
+var path = "C:\\Windows\\SysWOW64\\WindowsPowerShell\\v1.0\\powershell.exe"
+var result = "> E:\\VAMTTest\\output.txt"
+*/
+
+
+]]></script>
+    <in-binding>
+      <bind name="ipAddress" type="string" export-name="ipAddress"/>
+      <bind name="vmUsername" type="string" export-name="vmUsername"/>
+      <bind name="vmPassword" type="SecureString" export-name="vmPassword"/>
+      <bind name="keyDescription" type="string" export-name="keyDescription"/>
+      <bind name="vamtScript" type="ResourceElement" export-name="vamtScript"/>
+      <bind name="vamtVmUser_1" type="string" export-name="vamtVmUser_1"/>
+      <bind name="vamtVmPwd_1" type="SecureString" export-name="vamtVmPwd_1"/>
+      <bind name="vmName" type="string" export-name="vmName"/>
+    </in-binding>
+    <out-binding>
+      <bind name="cmd" type="string" export-name="cmd"/>
+    </out-binding>
+    <description><![CDATA[Simple task with custom script capability.]]></description>
+    <position y="19.0" x="522.0"/>
+  </workflow-item>
+  <workflow-item name="item7" out-name="item3" type="custom-condition" alt-out-name="item8">
+    <display-name><![CDATA[Validate tools status]]></display-name>
+    <script encoded="false"><![CDATA[System.log("VC VM: "+vm)
+System.log("VC VM name: "+vm.name)
+
+var toolStatus = vm.guest.toolsStatus.value;
+//if(String(toolStatus) != "toolsNotInstalled" && String(toolStatus) != "toolsNotRunning")
+if(String(toolStatus) == "toolsOk" || (String(toolStatus) == "toolsOld"))
+return true;
+else
+return false; ]]></script>
+    <in-binding>
+      <bind name="vm" type="VC:VirtualMachine" export-name="vamtVm"/>
+    </in-binding>
+    <out-binding/>
+    <description><![CDATA[Custom decision based on a custom script.]]></description>
+    <position y="10.0" x="320.0"/>
+  </workflow-item>
+  <workflow-item name="item8" out-name="item10" type="task">
+    <display-name><![CDATA[Show message]]></display-name>
+    <script encoded="false"><![CDATA[
+var errorMessage = "VMware Tools are not running";
+System.error("[Error::] "+ errorMessage); ]]></script>
+    <in-binding/>
+    <out-binding/>
+    <description><![CDATA[Simple task with custom script capability.]]></description>
+    <position y="130.0" x="320.0"/>
+  </workflow-item>
+  <workflow-item name="item10" prototype-id="increase-counter" out-name="item7" content-mode="x" type="task">
+    <display-name><![CDATA[Increase counter]]></display-name>
+    <script encoded="false"><![CDATA[//Auto-generated script
+counter = counter + 1;]]></script>
+    <in-binding>
+      <bind name="counter" type="number" export-name="counter">
+        <description><![CDATA[Item to increase]]></description>
+      </bind>
+    </in-binding>
+    <out-binding>
+      <bind name="counter" type="number" export-name="counter">
+        <description><![CDATA[Increased item]]></description>
+      </bind>
+    </out-binding>
+    <description><![CDATA[Increment a counter by one.]]></description>
+    <position y="130.0" x="160.0"/>
+  </workflow-item>
+  <presentation/>
+</workflow>

@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<config-element id="dcf41dba-6a8f-4038-ba5c-7643819bf0d5" version="0.0.0">
+  <display-name><![CDATA[ouSelectionSes]]></display-name>
+  <atts>
+    <att name="SesWindows2016NonProd" type="string" read-only="false">
+      <value encoded="n"><![CDATA[OU=CIS Windows 2016,OU=HDC,OU=Member Servers,DC=SES,DC=SHSU,DC=COM,DC=SG]]></value>
+    </att>
+    <att name="SesWindows2016NonProdDB" type="string" read-only="false">
+      <value encoded="n"><![CDATA[OU=CIS Windows 2016 - DB,OU=HDC,OU=Member Servers,DC=SES,DC=SHSU,DC=COM,DC=SG]]></value>
+    </att>
+    <att name="SesWindows2019NonProd" type="string" read-only="false">
+      <value encoded="n"><![CDATA[OU=CIS Windows 2019,OU=HDC,OU=Member Servers,DC=SES,DC=SHSU,DC=COM,DC=SG]]></value>
+    </att>
+    <att name="SesWindows2019NonProdDB" type="string" read-only="false">
+      <value encoded="n"><![CDATA[OU=CIS Windows 2019 – DB,OU=HDC,OU=Member Servers,DC=SES,DC=SHSU,DC=COM,DC=SG]]></value>
+    </att>
+    <att name="SesWindows2012NonProd" type="string" read-only="false">
+      <value encoded="n"><![CDATA[OU=Security Compliance Win2016 Servers,OU=HDC,OU=Member Servers,DC=SES,DC=SHSU,DC=COM,DC=SG]]></value>
+    </att>
+    <att name="SesWindows2012NonProdDB" type="string" read-only="false">
+      <value encoded="n"><![CDATA[OU=Security Compliance Win2016 Servers - DB,OU=HDC,OU=Member Servers,DC=SES,DC=SHSU,DC=COM,DC=SG]]></value>
+    </att>
+  </atts>
+</config-element>

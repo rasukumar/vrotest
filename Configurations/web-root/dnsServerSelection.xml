@@ -1,0 +1,72 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<config-element id="fd576412-4978-46bd-aa5e-765cb1d1af64" version="0.0.0">
+  <display-name><![CDATA[dnsServerSelection]]></display-name>
+  <atts>
+    <att name="FRTHCLOUD" type="Array/string" read-only="false">
+      <value encoded="n"><![CDATA[[20:string#10.245.152.18,20:string#10.245.152.19]]]></value>
+    </att>
+    <att name="AMKHCLOUD" type="Array/string" read-only="false">
+      <value encoded="n"><![CDATA[[20:string#10.244.152.18,20:string#10.244.152.19]]]></value>
+    </att>
+    <att name="FRTAIC" type="Array/string" read-only="false">
+      <value encoded="n"><![CDATA[[20:string#10.240.152.18,20:string#10.240.152.19]]]></value>
+    </att>
+    <att name="AMKAIC" type="Array/string" read-only="false">
+      <value encoded="n"><![CDATA[[20:string#10.240.152.18,20:string#10.240.152.19]]]></value>
+    </att>
+    <att name="AMKDEVHEALTHGRP" type="Array/string" read-only="false">
+      <value encoded="n"><![CDATA[[19:string#10.246.40.19]]]></value>
+    </att>
+    <att name="FRTDEVHEALTHGRP" type="Array/string" read-only="false">
+      <value encoded="n"><![CDATA[[20:string#10.246.168.19]]]></value>
+    </att>
+    <att name="FRTHEALTHGRP" type="Array/string" read-only="false">
+      <value encoded="n"><![CDATA[[20:string#10.245.152.16,20:string#10.245.152.17]]]></value>
+    </att>
+    <att name="AMKHEALTHGRP" type="Array/string" read-only="false">
+      <value encoded="n"><![CDATA[[20:string#10.244.152.16,20:string#10.244.152.17]]]></value>
+    </att>
+    <att name="FRTHEALTHGRPEXTP" type="Array/string" read-only="false">
+      <value encoded="n"><![CDATA[[19:string#10.243.150.8,19:string#10.243.150.9]]]></value>
+    </att>
+    <att name="AMKHEALTHGRPEXTP" type="Array/string" read-only="false">
+      <value encoded="n"><![CDATA[[19:string#10.239.150.8,19:string#10.239.150.9]]]></value>
+    </att>
+    <att name="FRTSECHEALTHGRP" type="Array/string" read-only="false">
+      <value encoded="n"><![CDATA[[18:string#10.245.88.8,18:string#10.245.88.9]]]></value>
+    </att>
+    <att name="AMKSECHEALTHGRP" type="Array/string" read-only="false">
+      <value encoded="n"><![CDATA[[18:string#10.245.88.8,18:string#10.245.88.9]]]></value>
+    </att>
+    <att name="FRTHEALTHGRPEXTS" type="Array/string" read-only="false">
+      <value encoded="n"><![CDATA[[19:string#10.243.151.8,19:string#10.243.151.9]]]></value>
+    </att>
+    <att name="AMKHEALTHGRPEXTS" type="Array/string" read-only="false">
+      <value encoded="n"><![CDATA[[19:string#10.239.151.8,19:string#10.239.151.9]]]></value>
+    </att>
+    <att name="FRTNHG" type="Array/string" read-only="false">
+      <value encoded="n"><![CDATA[[20:string#10.240.152.36,20:string#10.240.152.37]]]></value>
+    </att>
+    <att name="AMKNHG" type="Array/string" read-only="false">
+      <value encoded="n"><![CDATA[[20:string#10.237.152.30,20:string#10.237.152.31]]]></value>
+    </att>
+    <att name="AMKSES" type="Array/string" read-only="false">
+      <value encoded="n"><![CDATA[[19:string#10.216.20.91,19:string#10.216.20.92]]]></value>
+    </att>
+    <att name="FRTSES" type="Array/string" read-only="false">
+      <value encoded="n"><![CDATA[[19:string#10.216.20.91,19:string#10.216.20.92]]]></value>
+    </att>
+    <att name="AMKSHSES" type="Array/string" read-only="false">
+      <value encoded="n"><![CDATA[[]]]></value>
+    </att>
+    <att name="FRTSHSES" type="Array/string" read-only="false">
+      <value encoded="n"><![CDATA[[]]]></value>
+    </att>
+    <att name="AMKEXTHEALTHGRP" type="Array/string" read-only="false">
+      <value encoded="n"><![CDATA[[20:string#10.239.160.21,20:string#10.239.160.22]]]></value>
+    </att>
+    <att name="FRTEXTHEALTHGRP" type="Array/string" read-only="false">
+      <value encoded="n"><![CDATA[[20:string#10.243.160.17,20:string#10.243.160.18]]]></value>
+    </att>
+  </atts>
+</config-element>

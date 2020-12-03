@@ -1,0 +1,154 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<workflow xmlns="http://vmware.com/vco/workflow" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://vmware.com/vco/workflow http://vmware.com/vco/workflow/Workflow-v4.xsd" root-name="item1" object-name="workflow:name=generic" id="81791f19-fd2b-49eb-aeab-0178a0608183" version="0.0.0" api-version="6.0.0" allowed-operations="vfe" editor-version="2.0" restartMode="1" resumeFromFailedMode="0">
+  <display-name><![CDATA[TestRestApi]]></display-name>
+  <position y="50.0" x="100.0"/>
+  <attrib name="username" type="string" read-only="false">
+    <value encoded="n"><![CDATA[configadmin]]></value>
+  </attrib>
+  <attrib name="password" type="SecureString" read-only="false">
+    <value encoded="n"><![CDATA[15BT50S40O35Z35M77Z30P72W64I40M23V24L30T39Q38M37RE9736F5M972580DMDFE7E86RA6C168AO3F74D60WEE61BC4XB95882AZB7A263DO83F652DIC8320ECS89C9516G1249B14X26C89E0I1CB04D6X4151A26O865B8C7REE86310W]]></value>
+  </attrib>
+  <attrib name="RESTHost" type="REST:RESTHost" read-only="false">
+    <value encoded="n"><![CDATA[dunes://service.dunes.ch/CustomSDKObject?id='bc4bd031-b095-4620-ae39-5305f89dbdab'&dunesName='REST:RESTHost']]></value>
+  </attrib>
+  <attrib name="accessToken" type="string" read-only="false">
+    <value encoded="n"><![CDATA[]]></value>
+  </attrib>
+  <attrib name="refreshToken" type="string" read-only="false">
+    <value encoded="n"><![CDATA[]]></value>
+  </attrib>
+  <workflow-item name="item0" type="end" end-mode="0">
+    <position y="110.0" x="460.0"/>
+  </workflow-item>
+  <workflow-item name="item1" out-name="item3" type="task">
+    <display-name><![CDATA[Scriptable task]]></display-name>
+    <script encoded="false"><![CDATA[
+
+
+var content = "{\"username\":\"" + username + "\",\"password\":\"" + password + "\"}";
+var URI = "/csp/gateway/am/api/login?access_token";
+var request = RESTHost.createRequest("POST", URI,content);
+
+//set the request content type
+request.contentType = "application\/json";
+request.setHeader("Accept", "application/json");
+System.log("Request URL: " + request.fullUrl);
+
+var response = request.execute();
+System.log("Response: " + response);
+statusCode = response.statusCode;
+System.log("Status code: " + statusCode);
+contentAsString = response.contentAsString;
+//System.log("Content as string: " + contentAsString); 
+
+var jsonResponse = JSON.parse(contentAsString)
+ accessToken = jsonResponse.access_token
+refreshToken = jsonResponse.refresh_token
+//System.log(accessToken)
+//System.log(refreshToken)
+ 
+]]></script>
+    <in-binding>
+      <bind name="username" type="string" export-name="username"/>
+      <bind name="password" type="SecureString" export-name="password"/>
+      <bind name="RESTHost" type="REST:RESTHost" export-name="RESTHost"/>
+    </in-binding>
+    <out-binding>
+      <bind name="accessToken" type="string" export-name="accessToken"/>
+      <bind name="refreshToken" type="string" export-name="refreshToken"/>
+    </out-binding>
+    <description><![CDATA[Simple task with custom script capability.]]></description>
+    <position y="61.0" x="148.0"/>
+  </workflow-item>
+  <workflow-item name="item2" out-name="item0" type="task">
+    <display-name><![CDATA[Scriptable task]]></display-name>
+    <script encoded="false"><![CDATA[
+var content = "";accessToken
+var URI = "/iaas/api/fabric-networks-vsphere";
+var request = RESTHost.createRequest("GET", URI);
+accessToken = "Bearer "+accessToken
+
+//set the request content type
+//request.contentType = "application\/json";
+request.setHeader("Accept", "application/json");
+request.setHeader("Authorization", accessToken);
+System.log("Request URL: " + request.fullUrl);
+
+var response = request.execute();
+System.log("Response: " + response);
+statusCode = response.statusCode;
+System.log("Status code: " + statusCode);
+var contentAsString = response.contentAsString;
+System.log("Content as string: " + contentAsString); 
+
+var jsonContent = JSON.parse(contentAsString)
+jsonContent = jsonContent.content
+var arr = new Array()
+var tagArr =""
+
+for each (var obj in jsonContent){
+    arr.push(obj.name)
+    System.log(obj.name + ";")
+    var tagsJson = obj.tags
+    tagArr = new Array()
+    for each(var tag in tagsJson){        
+        tagArr.push(tag.key)        
+    }
+    
+    System.log(tagArr)
+    System.log("-------------------------------------- \n")
+}
+
+//System.log(arr)]]></script>
+    <in-binding>
+      <bind name="RESTHost" type="REST:RESTHost" export-name="RESTHost"/>
+      <bind name="accessToken" type="string" export-name="accessToken"/>
+      <bind name="refreshToken" type="string" export-name="refreshToken"/>
+    </in-binding>
+    <out-binding/>
+    <description><![CDATA[Simple task with custom script capability.]]></description>
+    <position y="130.0" x="220.0"/>
+  </workflow-item>
+  <workflow-item name="item3" out-name="item0" type="task">
+    <display-name><![CDATA[Scriptable task]]></display-name>
+    <script encoded="false"><![CDATA[
+System.log("...........Network profiles...........")
+
+var content = "";
+var URI = "/iaas/api/network-profiles?pageSize=1000";
+var request = RESTHost.createRequest("GET", URI);
+accessToken = "Bearer "+accessToken
+
+//set the request content type
+//request.contentType = "application\/json";
+request.setHeader("Accept", "application/json");
+request.setHeader("Authorization", accessToken);
+System.log("Request URL: " + request.fullUrl);
+
+var response = request.execute();
+System.log("Response: " + response);
+statusCode = response.statusCode;
+System.log("Status code: " + statusCode);
+var contentAsString = response.contentAsString;
+//System.log("Content as string: " + contentAsString); 
+
+var jsonContent = JSON.parse(contentAsString)
+jsonContent = jsonContent.content
+var arr = new Array()
+
+for each (var obj in jsonContent){
+        arr.push(obj.name)
+}
+
+System.log(arr)
+System.log(arr.length)]]></script>
+    <in-binding>
+      <bind name="RESTHost" type="REST:RESTHost" export-name="RESTHost"/>
+      <bind name="accessToken" type="string" export-name="accessToken"/>
+    </in-binding>
+    <out-binding/>
+    <description><![CDATA[Simple task with custom script capability.]]></description>
+    <position y="60.0" x="304.0"/>
+  </workflow-item>
+  <presentation/>
+</workflow>

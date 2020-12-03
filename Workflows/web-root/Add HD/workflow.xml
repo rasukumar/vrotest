@@ -1,0 +1,254 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<workflow xmlns="http://vmware.com/vco/workflow" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://vmware.com/vco/workflow http://vmware.com/vco/workflow/Workflow-v4.xsd" root-name="item4" object-name="Workflow:name=generic" id="93f2ca68-9018-416e-80d2-6e2a7e7991b1" version="0.2.0" api-version="6.0.0" allowed-operations="evf" editor-version="2.0" restartMode="1" resumeFromFailedMode="0">
+  <display-name><![CDATA[Add HD]]></display-name>
+  <description><![CDATA[Adds a virtual disk [thick eager zeroed] to a virtual machine.]]></description>
+  <ref-types><![CDATA[(VC:VirtualMachine)]]></ref-types>
+  <position y="30.0" x="140.0"/>
+  <input>
+    <param name="vm" type="VC:VirtualMachine">
+      <description><![CDATA[Virtual machine to which to add the disk]]></description>
+    </param>
+    <param name="diskSize" type="number">
+      <description><![CDATA[Disk size (in GB)]]></description>
+    </param>
+  </input>
+  <attrib name="scsiControllerKey" type="number" read-only="false">
+    <value encoded="n"><![CDATA[0.0]]></value>
+    <description><![CDATA[LSI or Bus Logic SCSI controller key]]></description>
+  </attrib>
+  <attrib name="task" type="VC:Task" read-only="false">
+    <value encoded="n"><![CDATA[]]></value>
+    <description><![CDATA[Task to await]]></description>
+  </attrib>
+  <attrib name="progress" type="boolean" read-only="false">
+    <value encoded="n"><![CDATA[false]]></value>
+    <description><![CDATA[Log progress while waiting for the task to complete]]></description>
+  </attrib>
+  <attrib name="pollRate" type="number" read-only="false">
+    <value encoded="n"><![CDATA[1.0]]></value>
+    <description><![CDATA[Polling rate for the task state, in seconds]]></description>
+  </attrib>
+  <attrib name="noContollerError" type="string" read-only="false">
+    <value encoded="n"><![CDATA[Error: No controller found]]></value>
+    <description><![CDATA[Error if virtual machine has no IDE controller]]></description>
+  </attrib>
+  <attrib name="eagerlyScrub" type="boolean" read-only="false">
+    <value encoded="n"><![CDATA[true]]></value>
+    <description><![CDATA[Use thin provisioning?]]></description>
+  </attrib>
+  <attrib name="scsiBusNumber" type="number" read-only="false">
+    <value encoded="n"><![CDATA[]]></value>
+    <description><![CDATA[SCSI controller bus number]]></description>
+  </attrib>
+  <attrib name="datastore" type="VC:Datastore" read-only="false">
+    <value encoded="n"><![CDATA[]]></value>
+    <description><![CDATA[Datastore in which to put the virtual disk file]]></description>
+  </attrib>
+  <attrib name="diskIndex" type="number" read-only="false">
+    <value encoded="n"><![CDATA[]]></value>
+    <description><![CDATA[Disk index]]></description>
+  </attrib>
+  <attrib name="diskMode" type="VC:VirtualDiskMode" read-only="false">
+    <value encoded="n"><![CDATA[dunes://service.dunes.ch/CustomSDKObject?id='persistent'&dunesName='VC:VirtualDiskMode']]></value>
+    <description><![CDATA[Disk persistence mode]]></description>
+  </attrib>
+  <attrib name="timeout" type="number" read-only="false">
+    <value encoded="n"><![CDATA[5.0]]></value>
+  </attrib>
+  <workflow-item name="item0" out-name="item3" type="task">
+    <display-name><![CDATA[Add disk]]></display-name>
+    <script encoded="false"><![CDATA[var configSpec = new VcVirtualMachineConfigSpec();
+var deviceConfigSpecs = new Array();
+var deviceConfigSpec;
+
+// Add/Create the disk
+deviceConfigSpec = System.getModule("com.vmware.ihis").createVirtualDiskFlatVer2ConfigSpec_eagerZeroed(
+        diskSize,datastore,scsiControllerKey,diskIndex,VcVirtualDiskMode.fromString(diskMode.name),eagerlyScrub);
+
+deviceConfigSpecs[0] = deviceConfigSpec;
+
+// List of devices
+configSpec.deviceChange = deviceConfigSpecs;
+
+// Launch the reconfigVM task
+task = vm.reconfigVM_Task( configSpec );
+System.getModule("com.vmware.library.vc.vm.tools").vim3WaitToolsStarted(vm,pollRate,timeout) ;
+System.log("Disk Added to VM"); 
+ 
+
+]]></script>
+    <in-binding>
+      <bind name="vm" type="VC:VirtualMachine" export-name="vm"/>
+      <bind name="scsiControllerKey" type="number" export-name="scsiControllerKey"/>
+      <bind name="diskSize" type="number" export-name="diskSize"/>
+      <bind name="diskMode" type="VC:VirtualDiskMode" export-name="diskMode"/>
+      <bind name="diskIndex" type="number" export-name="diskIndex"/>
+      <bind name="datastore" type="VC:Datastore" export-name="datastore"/>
+      <bind name="pollRate" type="number" export-name="pollRate"/>
+      <bind name="timeout" type="number" export-name="timeout"/>
+      <bind name="eagerlyScrub" type="boolean" export-name="eagerlyScrub"/>
+    </in-binding>
+    <out-binding>
+      <bind name="task" type="VC:Task" export-name="task"/>
+    </out-binding>
+    <position y="150.0" x="500.0"/>
+  </workflow-item>
+  <workflow-item name="item5" out-name="item6" type="task">
+    <display-name><![CDATA[Retrieve Scsi controller found ?]]></display-name>
+    <script encoded="false"><![CDATA[scsiControllerKey = -1;
+var devices = vm.config.hardware.device;
+var isScsiBusNumberInvalid = true;
+if(scsiBusNumber==null || scsiBusNumber<0)
+	scsiBusNumber=0;
+if ( devices != null )  {
+	for ( device in devices )  {
+		if ( devices[device] instanceof VcVirtualBusLogicController || devices[device] instanceof VcVirtualLsiLogicController 
+		|| devices[device] instanceof VcParaVirtualSCSIController || devices[device] instanceof VcVirtualLsiLogicSASController )  {
+			if(scsiBusNumber==devices[device].busNumber){
+				scsiControllerKey = devices[device].key;
+				isScsiBusNumberInvalid = false;
+				System.log( "SCSI controller found. (Key: " + scsiControllerKey + ")" );
+				break;
+			}
+		}
+	}
+}
+if(isScsiBusNumberInvalid){
+	System.log( "SCSI controller not found. The bus number entered is invalid" );
+}
+
+// Find disk index
+
+for each (var device in vm.config.hardware.device) {
+			if (device instanceof VcVirtualDisk) {
+				var num=device.UnitNumber
+				System.log("device no: "+num);
+				diskIndex=num + 1;
+				System.log("DiskIndex for next disk" +diskIndex);
+	}
+		} 
+ 
+
+
+]]></script>
+    <in-binding>
+      <bind name="vm" type="VC:VirtualMachine" export-name="vm"/>
+      <bind name="scsiBusNumber" type="number" export-name="scsiBusNumber"/>
+    </in-binding>
+    <out-binding>
+      <bind name="scsiControllerKey" type="number" export-name="scsiControllerKey"/>
+      <bind name="diskIndex" type="number" export-name="diskIndex"/>
+    </out-binding>
+    <position y="150.0" x="100.0"/>
+  </workflow-item>
+  <workflow-item name="item6" out-name="item0" type="condition" alt-out-name="item2" comparator="0">
+    <display-name><![CDATA[Scsi controller found ?]]></display-name>
+    <script encoded="false"><![CDATA[//Generated by the system, cannot be edited
+return (scsiControllerKey >= 0.0) ;]]></script>
+    <in-binding>
+      <bind name="scsiControllerKey" type="number" export-name="scsiControllerKey"/>
+    </in-binding>
+    <out-binding/>
+    <condition name="scsiControllerKey" type="number" comparator="5" label="null">0.0</condition>
+    <position y="140.0" x="300.0"/>
+  </workflow-item>
+  <workflow-item name="item2" throw-bind-name="noContollerError" type="end" end-mode="1">
+    <position y="190.0" x="360.0"/>
+  </workflow-item>
+  <workflow-item name="item3" type="end" end-mode="0">
+    <position y="90.0" x="600.0"/>
+  </workflow-item>
+  <workflow-item name="item4" out-name="item7" type="task">
+    <display-name><![CDATA[check Params]]></display-name>
+    <script encoded="false"><![CDATA[if (diskSize < 0.01 ) {
+	throw ("Error, invalid parameter. Disk size should be no less than 0.01 ");
+}]]></script>
+    <in-binding>
+      <bind name="diskSize" type="number" export-name="diskSize"/>
+    </in-binding>
+    <out-binding/>
+    <position y="60.0" x="100.0"/>
+  </workflow-item>
+  <workflow-item name="item7" out-name="item5" type="task">
+    <display-name><![CDATA[Get vm datastore]]></display-name>
+    <script encoded="false"><![CDATA[
+var vmxFilePath = vm.config.files.vmPathName;
+System.log(vmxFilePath);
+
+
+var startOfDatastoreName = vmxFilePath.indexOf('[')+1;
+var endOfDatastoreName = vmxFilePath.indexOf(']');
+var vmxDatastore = vmxFilePath.substring(startOfDatastoreName,endOfDatastoreName);
+
+var xpath = "xpath:name='" + vmxDatastore + "'";
+var datastores = VcPlugin.getAllDatastores(null, xpath);
+
+if(datastores.length == 0) {
+	throw "Unable to find a datastore named '" + vmxDatastore + "'";
+}
+else if (datastores.length > 1) {
+	throw "Found more than one datastore named '" + vmxDatastore + "'";
+}
+
+datastore=datastores[0];
+ 
+ 
+]]></script>
+    <in-binding>
+      <bind name="vm" type="VC:VirtualMachine" export-name="vm"/>
+    </in-binding>
+    <out-binding>
+      <bind name="datastore" type="VC:Datastore" export-name="datastore"/>
+    </out-binding>
+    <description><![CDATA[Simple task with custom script capability.]]></description>
+    <position y="100.0" x="100.0"/>
+  </workflow-item>
+  <presentation>
+    <p-step>
+      <title><![CDATA[VM]]></title>
+      <p-param name="vm">
+        <desc><![CDATA[Virtual machine to which to add the disk]]></desc>
+        <p-qual name="mandatory"><![CDATA[true]]></p-qual>
+        <p-qual name="show-select-as"><![CDATA[list]]></p-qual>
+        <p-qual name="contextualParameter"><![CDATA[]]></p-qual>
+      </p-param>
+    </p-step>
+    <p-step>
+      <title><![CDATA[Disk]]></title>
+      <p-group>
+        <title><![CDATA[Disk information]]></title>
+        <desc><![CDATA['Disk index' must be between 0 and 15 (and not 7 as it's reserved by spec)]]></desc>
+        <p-param name="datastore">
+          <desc><![CDATA[Datastore in which to put the virtual disk file]]></desc>
+          <p-qual name="mandatory"><![CDATA[true]]></p-qual>
+          <p-qual name="show-select-as"><![CDATA[list]]></p-qual>
+        </p-param>
+        <p-param name="diskMode">
+          <desc><![CDATA[Disk persistence mode]]></desc>
+          <p-qual kind="static" name="mandatory" type="boolean"><![CDATA[true]]></p-qual>
+        </p-param>
+        <p-param name="diskIndex">
+          <desc><![CDATA[Disk index]]></desc>
+          <p-qual kind="static" name="numberFormat" type="String"><![CDATA[#]]></p-qual>
+          <p-qual kind="static" name="minNumberValue" type="Number"><![CDATA[0.0]]></p-qual>
+          <p-qual kind="static" name="maxNumberValue" type="Number"><![CDATA[15.0]]></p-qual>
+          <p-qual name="mandatory"><![CDATA[true]]></p-qual>
+          <p-qual kind="ognl" name="ognlValidator" type="String"><![CDATA[(#diskIndex != 7 ? "": "7 is not valid" )]]></p-qual>
+        </p-param>
+        <p-param name="diskSize">
+          <desc><![CDATA[Disk size (in GB)]]></desc>
+          <p-qual name="mandatory"><![CDATA[true]]></p-qual>
+          <p-qual kind="static" name="minNumberValue" type="Number"><![CDATA[0.01]]></p-qual>
+        </p-param>
+        <p-param name="scsiBusNumber">
+          <desc><![CDATA[SCSI controller bus number]]></desc>
+          <p-qual kind="static" name="numberFormat" type="String"><![CDATA[#]]></p-qual>
+          <p-qual kind="static" name="minNumberValue" type="Number"><![CDATA[0]]></p-qual>
+        </p-param>
+        <p-param name="thinProvisioned">
+          <desc><![CDATA[Use thin provisioning?]]></desc>
+        </p-param>
+      </p-group>
+    </p-step>
+  </presentation>
+</workflow>

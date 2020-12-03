@@ -1,0 +1,32 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dunes-script-module name="returnNetworkTier" result-type="Array/string" api-version="6.0.0" id="fcf809ef-1ec1-4bbb-9ae7-7f9b9c40b816" version="0.0.0" allowed-operations="vfe" category-name="com.vmware.ihis">
+  <param n="inputCategory" t="string"><![CDATA[]]></param>
+  <param n="elementName" t="string"><![CDATA[]]></param>
+  <param n="path" t="string"><![CDATA[]]></param>
+  <script encoded="false"><![CDATA[var cat = Server.getConfigurationElementCategoryWithPath(path)
+var configEls = cat.configurationElements
+var values = new Array()
+var attr = ""
+
+if(inputCategory != "" && inputCategory != null){
+    for each(var c in configEls) {
+        if(c.name == elementName){
+            if(inputCategory == "DBS"){
+                attr =  c.getAttributeWithKey(inputCategory)
+            }
+            else{
+                attr =  c.getAttributeWithKey("ALL")
+            }    
+            values = attr.value
+            break
+        }
+
+    }
+
+}
+
+//System.log(values)
+return values
+
+]]></script>
+</dunes-script-module>

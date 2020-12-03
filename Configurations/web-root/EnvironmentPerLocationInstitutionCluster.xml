@@ -1,0 +1,36 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<config-element id="ad99088c-9f22-4c49-9496-13989a9d82ca" version="0.0.0">
+  <display-name><![CDATA[EnvironmentPerLocationInstitutionCluster]]></display-name>
+  <atts>
+    <att name="NNAFRT" type="Array/string" read-only="false">
+      <value encoded="n"><![CDATA[[8:string#P,8:string#S,8:string#D,8:string#Z]]]></value>
+    </att>
+    <att name="SHSAMK" type="Array/string" read-only="false">
+      <value encoded="n"><![CDATA[[8:string#P,8:string#S,8:string#D,8:string#Z]]]></value>
+    </att>
+    <att name="NNAAMK" type="Array/string" read-only="false">
+      <value encoded="n"><![CDATA[[8:string#R]]]></value>
+    </att>
+    <att name="SHSFRT" type="Array/string" read-only="false">
+      <value encoded="n"><![CDATA[[8:string#R]]]></value>
+    </att>
+    <att name="HCLOUDFRT" type="Array/string" read-only="false">
+      <value encoded="n"><![CDATA[[8:string#P,8:string#S,8:string#D,8:string#Z]]]></value>
+    </att>
+    <att name="HCLOUDAMK" type="Array/string" read-only="false">
+      <value encoded="n"><![CDATA[[8:string#P,8:string#S,8:string#D,8:string#Z]]]></value>
+    </att>
+    <att name="COMMONAMK" type="Array/string" read-only="false">
+      <value encoded="n"><![CDATA[[8:string#P,8:string#S,8:string#D,8:string#Z]]]></value>
+    </att>
+    <att name="COMMONFRT" type="Array/string" read-only="false">
+      <value encoded="n"><![CDATA[[8:string#P,8:string#S,8:string#D,8:string#Z]]]></value>
+    </att>
+    <att name="NGEMRFRT" type="Array/string" read-only="false">
+      <value encoded="n"><![CDATA[[8:string#P,8:string#Z,8:string#S,8:string#D]]]></value>
+    </att>
+    <att name="NGEMRAMK" type="Array/string" read-only="false">
+      <value encoded="n"><![CDATA[[8:string#R]]]></value>
+    </att>
+  </atts>
+</config-element>

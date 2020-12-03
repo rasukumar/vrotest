@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:workflow xmlns:ns2="http://vmware.com/vco/workflow" root-name="item3" object-name="workflow:name=generic" id="f554ef77-c293-4869-8938-e280556299ad" editor-version="2.0" version="0.0.0" api-version="6.0.0" restartMode="1" resumeFromFailedMode="0">
+    <display-name>XML Parser Test</display-name>
+    <position y="101.42857142857143" x="80.0"/>
+    <input>
+        <param name="input" type="string"/>
+    </input>
+    <output>
+        <param name="output" type="string"/>
+    </output>
+    <workflow-item name="item0" type="end" end-mode="0" comparator="0">
+        <in-binding/>
+        <out-binding/>
+        <position y="50.0" x="280.0"/>
+    </workflow-item>
+    <workflow-item name="item1" out-name="item0" type="task" comparator="0">
+        <display-name>Parse the XML by Removing namespace</display-name>
+        <script encoded="false">xmlString ='&lt;?xml version="1.0" encoding="UTF-8"?&gt;';&#13;
+xmlString +='&lt;CreateITDCIResponse xmlns="http://www.ibm.com/maximo" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" creationDateTime="2016-06-22T13:07:11+00:00" transLanguage="EN" baseLanguage="EN" messageID="1466600831635951728" maximoVersion="7 1 20110105-1024 V7118-37"&gt;&lt;ITDCISet&gt;';&#13;
+xmlString +='&lt;CI&gt;';&#13;
+xmlString +='&lt;CHANGEBY&gt;Someuser&lt;/CHANGEBY&gt;';&#13;
+xmlString +='&lt;CHANGEDATE&gt;2016-06-22T13:07:11+00:00&lt;/CHANGEDATE&gt;';&#13;
+xmlString +='&lt;CIID&gt;123456&lt;/CIID&gt;';&#13;
+xmlString +='&lt;CINAME&gt;CINAMETEST&lt;/CINAME&gt;';&#13;
+xmlString +='&lt;CINUM&gt;CITEST&lt;/CINUM&gt;';&#13;
+xmlString +='&lt;ITDCIMANAGEDBY&gt;TBD&lt;/ITDCIMANAGEDBY&gt;';&#13;
+xmlString +='&lt;ITDCIOPERATINGENV&gt;TBD&lt;/ITDCIOPERATINGENV&gt;';&#13;
+xmlString +='&lt;ITDSERVCONTPLAN&gt;0&lt;/ITDSERVCONTPLAN&gt;';&#13;
+xmlString +='&lt;STATUS&gt;VERIFY&lt;/STATUS&gt;';&#13;
+xmlString +='&lt;STATUSDATE&gt;2016-06-22T13:07:11+00:00&lt;/STATUSDATE&gt;';&#13;
+xmlString +='&lt;/CI&gt;';&#13;
+xmlString +='&lt;/ITDCISet&gt;';&#13;
+xmlString +='&lt;/CreateITDCIResponse&gt;';&#13;
+&#13;
+&#13;
+// Strip out the namespace definition as vRO doesn't handle the definitions very well&#13;
+&#13;
+var modifiedXMLString = xmlString.replace('xmlns="http://www.ibm.com/maximo" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"',"");&#13;
+//var modifiedXMLString = xmlString;&#13;
+&#13;
+var parsedXML = new XML(modifiedXMLString)&#13;
+&#13;
+// Check to see whether we have any content&#13;
+&#13;
+if (!parsedXML) {&#13;
+ var errorCode = "Invalid XML Document";&#13;
+ throw "Invalid XML document";&#13;
+}&#13;
+&#13;
+// Validate that only 1 CI has been returned&#13;
+&#13;
+if (parsedXML.ITDCISet.CI.length() != 1) {&#13;
+ var errorCode = "Invalid number of CIs returned";&#13;
+ throw "Invalid number of CIs returned";&#13;
+}&#13;
+&#13;
+else {&#13;
+ for each (CI in parsedXML.ITDCISet.CI) {&#13;
+ System.log("The CI number is: " + CI.CIID);&#13;
+ }&#13;
+ }</script>
+        <in-binding/>
+        <out-binding/>
+        <description>Simple task with custom script capability.</description>
+        <position y="25.714285714285715" x="140.0"/>
+    </workflow-item>
+    <workflow-item name="item2" out-name="item0" type="task" comparator="0">
+        <display-name>Scriptable task</display-name>
+        <script encoded="false">xmlString ='&lt;?xml version="1.0" encoding="UTF-8"?&gt;';&#13;
+xmlString +='&lt;loadBalancer  xmlns="http://www.ibm.com/maximo" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" creationDateTime="2016-06-22T13:07:11+00:00" &gt;';&#13;
+xmlString +='  &lt;pool&gt;';&#13;
+xmlString +='    &lt;poolId&gt;pool-1&lt;/poolId&gt;';&#13;
+xmlString +='    &lt;name&gt;pool-one&lt;/name&gt;';&#13;
+xmlString +='    &lt;algorithm&gt;round-robin&lt;/algorithm&gt;';&#13;
+xmlString +='    &lt;transparent&gt;false&lt;/transparent&gt;';&#13;
+xmlString +='    &lt;member&gt;';&#13;
+xmlString +='      &lt;memberId&gt;member-1&lt;/memberId&gt;';&#13;
+xmlString +='      &lt;ipAddress&gt;192.168.0.1&lt;/ipAddress&gt;';&#13;
+xmlString +='      &lt;weight&gt;1&lt;/weight&gt;';&#13;
+xmlString +='      &lt;monitorPort&gt;80&lt;/monitorPort&gt;';&#13;
+xmlString +='      &lt;port&gt;80&lt;/port&gt;';&#13;
+xmlString +='      &lt;maxConn&gt;0&lt;/maxConn&gt;';&#13;
+xmlString +='      &lt;minConn&gt;0&lt;/minConn&gt;';&#13;
+xmlString +='      &lt;condition&gt;enabled&lt;/condition&gt;';&#13;
+xmlString +='      &lt;name&gt;member-one&lt;/name&gt;';&#13;
+xmlString +='    &lt;/member&gt;';&#13;
+xmlString +='    &lt;member&gt;';&#13;
+xmlString +='      &lt;memberId&gt;member-2&lt;/memberId&gt;';&#13;
+xmlString +='      &lt;ipAddress&gt;192.168.0.2&lt;/ipAddress&gt;';&#13;
+xmlString +='      &lt;weight&gt;1&lt;/weight&gt;';&#13;
+xmlString +='      &lt;monitorPort&gt;80&lt;/monitorPort&gt;';&#13;
+xmlString +='      &lt;port&gt;80&lt;/port&gt;';&#13;
+xmlString +='      &lt;maxConn&gt;0&lt;/maxConn&gt;';&#13;
+xmlString +='      &lt;minConn&gt;0&lt;/minConn&gt;';&#13;
+xmlString +='      &lt;condition&gt;enabled&lt;/condition&gt;';&#13;
+xmlString +='      &lt;name&gt;member-two&lt;/name&gt;';&#13;
+xmlString +='    &lt;/member&gt;';&#13;
+xmlString +='  &lt;/pool&gt;';&#13;
+xmlString +='&lt;/loadBalancer&gt;';&#13;
+&#13;
+&#13;
+// Convert the XML to a XML document object&#13;
+var document = XMLManager.fromString(xmlString);&#13;
+ &#13;
+//Search for member element by tag name&#13;
+var members = document.getElementsByTagName("member");&#13;
+ &#13;
+// Set a marker so we can break in the loop&#13;
+var memberFound = false;&#13;
+// Now iterate using i and starting from 0 (remember E4X is zero based.&#13;
+for (i = 0; i &lt; members.length; i++){&#13;
+ &#13;
+// Now get all the child nodes for the first member.&#13;
+var childNodes = members.item(i).getChildNodes();&#13;
+ &#13;
+// Iterate through the child node.&#13;
+for (j = 0; j &lt; childNodes.length; j++){&#13;
+ &#13;
+// Search for your IP address.&#13;
+if (childNodes.item(j).textContent == "192.168.0.2"){&#13;
+ &#13;
+// Now take the value of the iterator for the member iteration, not the member nodes.&#13;
+// In this case, it is 1.&#13;
+ &#13;
+System.log(childNodes.item(j).textContent + " found at index " + i);&#13;
+ &#13;
+// Set you flag as you've found the IP and do not want to iterate further.&#13;
+memberFound = true;&#13;
+break;&#13;
+}&#13;
+}&#13;
+if (memberFound) {break;}&#13;
+}</script>
+        <in-binding/>
+        <out-binding/>
+        <description>Simple task with custom script capability.</description>
+        <position y="97.14285714285715" x="311.42857142857144"/>
+    </workflow-item>
+    <workflow-item name="item3" out-name="item0" type="task" comparator="0">
+        <display-name>Scriptable task</display-name>
+        <script encoded="false">xmlString ='&lt;?xml version="1.0" encoding="UTF-8"?&gt;';&#13;
+xmlString +='&lt;BESAPI xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="BESAPI.xsd"&gt;';&#13;
+xmlString +='    &lt;Query Resource="(id of it, state of it, time issued of it) of bes action whose (id of it = 42)"&gt;';&#13;
+xmlString +='        &lt;Result&gt;';&#13;
+xmlString +='            &lt;Tuple&gt;';&#13;
+xmlString +='                &lt;Answer type="integer"&gt;41&lt;/Answer&gt;';&#13;
+xmlString +='                &lt;Answer type="string"&gt;close&lt;/Answer&gt;';&#13;
+xmlString +='            &lt;/Tuple&gt;';&#13;
+xmlString +='            &lt;Tuple&gt;';&#13;
+xmlString +='                &lt;Answer type="integer"&gt;42&lt;/Answer&gt;';&#13;
+xmlString +='                &lt;Answer type="string"&gt;Open&lt;/Answer&gt;';&#13;
+xmlString +='            &lt;/Tuple&gt;';&#13;
+xmlString +='        &lt;/Result&gt;';&#13;
+xmlString +='        &lt;Evaluation&gt;';&#13;
+xmlString +='            &lt;Time&gt;0.127ms&lt;/Time&gt;';&#13;
+xmlString +='            &lt;Plurality&gt;Singular&lt;/Plurality&gt;';&#13;
+xmlString +='        &lt;/Evaluation&gt;';&#13;
+xmlString +='    &lt;/Query&gt;';&#13;
+xmlString +='&lt;/BESAPI&gt;';&#13;
+&#13;
+var document = XMLManager.fromString(xmlString);&#13;
+ &#13;
+//Search for member element by tag name&#13;
+var members = document.getElementsByTagName("Tuple");&#13;
+ &#13;
+// Set a marker so we can break in the loop&#13;
+var memberFound = false;&#13;
+// Now iterate using i and starting from 0 (remember E4X is zero based.&#13;
+for (i = 0; i &lt; members.length; i++){&#13;
+ &#13;
+// Now get all the child nodes for the first member.&#13;
+var childNodes = members.item(i).getChildNodes();&#13;
+ &#13;
+// Iterate through the child node.&#13;
+for (j = 0; j &lt; childNodes.length; j++){&#13;
+ &#13;
+// Search for your IP address.&#13;
+if (childNodes.item(j).textContent == "42"){&#13;
+ &#13;
+// Now take the value of the iterator for the member iteration, not the member nodes.&#13;
+// In this case, it is 1.&#13;
+ &#13;
+System.log(childNodes.item(j).textContent + " found at index " + i);&#13;
+ &#13;
+// Set you flag as you've found the IP and do not want to iterate further.&#13;
+memberFound = true;&#13;
+break;&#13;
+}&#13;
+}&#13;
+if (memberFound) {break;}&#13;
+}&#13;
+</script>
+        <in-binding/>
+        <out-binding/>
+        <description>Simple task with custom script capability.</description>
+        <position y="125.71428571428572" x="154.2857142857143"/>
+    </workflow-item>
+    <presentation/>
+</ns2:workflow>

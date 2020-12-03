@@ -1,0 +1,16 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dunes-script-module name="returnInfraMgtNetworks" result-type="Array/string" api-version="6.0.0" id="d4229c11-5f22-4d34-90e3-d12e1e9b18a1" version="0.0.0" allowed-operations="vfe" category-name="com.vmware.ihis">
+  <param n="location" t="string"><![CDATA[]]></param>
+  <script encoded="false"><![CDATA[
+var configElement = Server.findAllForType("ConfigurationElement","name='infraMgtNetworks'")
+
+var networks = new Array()
+var attr =  configElement[0].getAttributeWithKey(location)
+networks = attr.value
+attr =  configElement[0].getAttributeWithKey("STRETCHED")
+networks = networks.concat(attr.value)
+
+return networks 
+ 
+]]></script>
+</dunes-script-module>

@@ -1,0 +1,48 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<workflow xmlns="http://vmware.com/vco/workflow" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://vmware.com/vco/workflow http://vmware.com/vco/workflow/Workflow-v4.xsd" root-name="item1" object-name="workflow:name=generic" id="a9304cca-e910-4c7c-83e7-27bbb719ccf0" version="0.0.0" api-version="6.0.0" allowed-operations="vfe" editor-version="2.0" restartMode="1" resumeFromFailedMode="0">
+  <display-name><![CDATA[Remove computer object from AD]]></display-name>
+  <position y="50.0" x="100.0"/>
+  <input>
+    <param name="vm" type="string"/>
+  </input>
+  <attrib name="adHost" type="AD:AdHost" read-only="false">
+    <value encoded="n"><![CDATA[dunes://service.dunes.ch/CustomSDKObject?id='%23_v2_%23%2C%23RootItem%23%2C%2329641269-44f8-47ec-a729-d6ddef0ad138%23'&dunesName='AD:AdHost']]></value>
+  </attrib>
+  <attrib name="computerObject" type="AD:ComputerAD" read-only="false">
+    <value encoded="n"><![CDATA[]]></value>
+  </attrib>
+  <workflow-item name="item0" type="end" end-mode="0">
+    <position y="40.0" x="420.0"/>
+  </workflow-item>
+  <workflow-item name="item1" out-name="item2" type="task">
+    <display-name><![CDATA[Scriptable task]]></display-name>
+    <script encoded="false"><![CDATA[
+//System.log(vm.name)
+//computerObject = ActiveDirectory.getComputerAD(vm.name,adHost)
+
+System.log(vm)
+computerObject = ActiveDirectory.getComputerAD(vm,adHost)
+
+
+System.log("computerObject name: "+computerObject.name)]]></script>
+    <in-binding>
+      <bind name="adHost" type="AD:AdHost" export-name="adHost"/>
+      <bind name="vm" type="string" export-name="vm"/>
+    </in-binding>
+    <out-binding>
+      <bind name="computerObject" type="AD:ComputerAD" export-name="computerObject"/>
+    </out-binding>
+    <description><![CDATA[Simple task with custom script capability.]]></description>
+    <position y="49.5" x="131.0"/>
+  </workflow-item>
+  <workflow-item name="item2" out-name="item0" type="link" linked-workflow-id="958080808080808080808080808080805681808001175609873343b6bbd2e3eea">
+    <display-name><![CDATA[Workflow element]]></display-name>
+    <in-binding>
+      <bind name="computer" type="AD:ComputerAD" export-name="computerObject"/>
+    </in-binding>
+    <out-binding/>
+    <description><![CDATA[ ]]></description>
+    <position y="53.94427190999916" x="263.38699100999077"/>
+  </workflow-item>
+  <presentation/>
+</workflow>

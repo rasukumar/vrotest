@@ -1,0 +1,45 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<config-element id="1bd11474-fefb-496f-8a96-d156c2e311a6" version="0.0.0">
+  <display-name><![CDATA[requestFormValues]]></display-name>
+  <atts>
+    <att name="institution" type="Array/string" read-only="false">
+      <value encoded="n"><![CDATA[[10:string#AIC,10:string#AMC,10:string#CGH,10:string#FSS,10:string#HIS,10:string#IMH,10:string#JMC,10:string#KKH,10:string#KTP,10:string#MHH,10:string#MOH,10:string#NCC,10:string#NDC,10:string#NHC,10:string#NHG,10:string#NHP,10:string#NHS,10:string#NNI,10:string#NSC,10:string#NTF,10:string#NUH,10:string#NUP,10:string#SCH,10:string#SEC,10:string#SGH,10:string#SHP,10:string#SHS,10:string#SKH,10:string#TTS,10:string#WHC,10:string#YCH]]]></value>
+    </att>
+    <att name="dcLocation" type="Array/string" read-only="false">
+      <value encoded="n"><![CDATA[[18:string#H-Cloud DC1,18:string#H-Cloud DC2]]]></value>
+    </att>
+    <att name="environment" type="Array/string" read-only="false">
+      <value encoded="n"><![CDATA[[8:string#P,8:string#R,8:string#S,8:string#D,8:string#Z]]]></value>
+    </att>
+    <att name="serverFunctionId" type="Array/string" read-only="false">
+      <value encoded="n"><![CDATA[[10:string#WEB,10:string#APP,10:string#DBS,10:string#INT,10:string#SYS,10:string#RPT,10:string#UTL,10:string#HYP,10:string#HYW,10:string#INT,10:string#MYC,10:string#ODB,10:string#SQL,10:string#KUI,10:string#SYP,10:string#EPF,10:string#WBS,10:string#ECL,10:string#ECP,10:string#BIR,10:string#BOE,10:string#CAB,10:string#CLA,10:string#CUB,10:string#SLD,10:string#BCA,10:string#BCW,10:string#CAR,10:string#SFT,10:string#LIC,10:string#XDC,10:string#DIR,10:string#NSG,10:string#MAS,10:string#BKP,10:string#KMS,10:string#PVS,11:string#DHCP,10:string#CLS,10:string#RDS,10:string#MDS,10:string#SEC]]]></value>
+    </att>
+    <att name="domainName" type="Array/string" read-only="false">
+      <value encoded="n"><![CDATA[[16:string#Nhg.local,16:string#Aic.local,23:string#Healthgrp.com.sg,30:string#Hcloud.healthgrp.com.sg,26:string#Devhealthgrp.com.sg,27:string#Healthgrpexts.com.sg,27:string#Healthgrpextp.com.sg,25:string#Schealthgrp.com.sg,23:string#Shses.shs.com.sg,18:string#Shsu.com.sg,22:string#Ses.shsu.com.sg]]]></value>
+    </att>
+    <att name="networkTier" type="Array/string" read-only="false">
+      <value encoded="n"><![CDATA[[10:string#WEB,10:string#APP,13:string#WEBAPP,9:string#DB]]]></value>
+    </att>
+    <att name="networkZone" type="Array/string" read-only="false">
+      <value encoded="n"><![CDATA[[15:string#Internet,15:string#Intranet,15:string#Extranet,10:string#DMZ]]]></value>
+    </att>
+    <att name="serviceType" type="Array/string" read-only="false">
+      <value encoded="n"><![CDATA[[15:string#Standard,23:string#Mission Critical,24:string#Business Critical]]]></value>
+    </att>
+    <att name="vmClusterType" type="Array/string" read-only="false">
+      <value encoded="n"><![CDATA[[18:string#Common Prod,22:string#Common Non Prod,19:string#ENZ Services,18:string#NHG DB Prod,22:string#NHG DB Non Prod,27:string#NHG Mission Critical,24:string#NHG Standard Prod,28:string#NHG Standard Non Prod,14:string#NHG DMZ,18:string#SHS DB Prod,22:string#SHS DB Non Prod,27:string#SHS Mission Critical,24:string#SHS Standard Prod,28:string#SHS Standard Non Prod,14:string#SHS DMZ,27:string#NGEMR Prod Cache ODB,15:string#NGEMR DB,32:string#NGEMR Prod Web & Services,24:string#NGEMR Prod Citrix,21:string#NGEMR Prod ECP,21:string#NGEMR Non Prod,25:string#NGEMR DR Cache ODB,18:string#NGEMR DR DB,30:string#NGEMR DR Web & Services,22:string#NGEMR DR Citrix,19:string#NGEMR DR ECP,28:string#H-Cloud Citrix (CaaS),32:string#Infra Management Services]]]></value>
+    </att>
+    <att name="storageTier" type="Array/string" read-only="false">
+      <value encoded="n"><![CDATA[[12:string#Tier1,12:string#Tier2,12:string#Tier3]]]></value>
+    </att>
+    <att name="application" type="Array/string" read-only="false">
+      <value encoded="n"><![CDATA[[10:string#CMS,10:string#EMS,11:string#HITS,10:string#ACP,11:string#ACUE,11:string#ADDC,11:string#BTLK,10:string#CON,10:string#CRM,10:string#CTG,11:string#EFRM,10:string#ESB,11:string#ESMF,10:string#GMS,10:string#GPS,11:string#HOME,11:string#IDPE,10:string#IIS,11:string#ILTC,10:string#INT,11:string#IRMS,10:string#LMS,11:string#MFND,11:string#NHLP,11:string#PGDS,10:string#PRM,11:string#SCON,10:string#SEA,10:string#SMF,10:string#SQL,11:string#TGIF,11:string#TH2H,11:string#WFLW,11:string#EMOS,11:string#BCRM,11:string#CCRM,11:string#CMIX,10:string#CMS,11:string#CRIS,10:string#CWB,9:string#DC,10:string#EDT,10:string#EFC,10:string#EMS,10:string#EPH,11:string#ISYN,11:string#MRIS,10:string#OAS,11:string#OPAS,11:string#PIMS,10:string#PSA,14:string#ME MONI,10:string#SAP]]]></value>
+    </att>
+    <att name="location" type="Array/string" read-only="false">
+      <value encoded="n"><![CDATA[[16:string#AMK (DC1),16:string#FRT (DC2)]]]></value>
+    </att>
+    <att name="networkTierNgemr" type="Array/string" read-only="false">
+      <value encoded="n"><![CDATA[[13:string#WEBAPP,9:string#DB,10:string#WEB]]]></value>
+    </att>
+  </atts>
+</config-element>

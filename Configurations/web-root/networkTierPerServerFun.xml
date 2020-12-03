@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<config-element id="bbe3a65a-7bdc-4dab-8be8-cf2f613cf214" version="0.0.0">
+  <display-name><![CDATA[networkTierPerServerFun]]></display-name>
+  <atts>
+    <att name="DBS" type="Array/string" read-only="false">
+      <value encoded="n"><![CDATA[[9:string#DB]]]></value>
+    </att>
+    <att name="ALL" type="Array/string" read-only="false">
+      <value encoded="n"><![CDATA[[10:string#WEB,10:string#APP,13:string#WEBAPP,9:string#DB]]]></value>
+    </att>
+  </atts>
+</config-element>

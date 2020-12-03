@@ -1,0 +1,356 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<workflow xmlns="http://vmware.com/vco/workflow" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://vmware.com/vco/workflow http://vmware.com/vco/workflow/Workflow-v4.xsd" root-name="item5" object-name="workflow:name=generic" id="4afacaee-6bf1-4850-8591-474a85b23924" version="0.0.0" api-version="6.0.0" allowed-operations="evf" editor-version="1.6" restartMode="1" resumeFromFailedMode="0">
+  <display-name><![CDATA[Add and format disk for Windows VM]]></display-name>
+  <description><![CDATA[not in use]]></description>
+  <position y="54.5" x="25.0"/>
+  <attrib name="vmUsername" type="string" read-only="false" conf-id="37abddc7-c093-4fed-857b-38273fe27da5" conf-key="vmLocalUsername">
+    <value encoded="n"><![CDATA[]]></value>
+  </attrib>
+  <attrib name="vmPassword" type="SecureString" read-only="false" conf-id="37abddc7-c093-4fed-857b-38273fe27da5" conf-key="vmLocalPassword"/>
+  <attrib name="toolStatus" type="string" read-only="false">
+    <value encoded="n"><![CDATA[]]></value>
+  </attrib>
+  <attrib name="counter" type="number" read-only="false">
+    <value encoded="n"><![CDATA[1.0]]></value>
+    <description><![CDATA[counter to increment]]></description>
+  </attrib>
+  <attrib name="driveLetters" type="Array/string" read-only="false">
+    <value encoded="n"><![CDATA[]]></value>
+  </attrib>
+  <attrib name="driveLabels" type="Array/string" read-only="false">
+    <value encoded="n"><![CDATA[]]></value>
+  </attrib>
+  <attrib name="vm" type="VC:VirtualMachine" read-only="false">
+    <value encoded="n"><![CDATA[dunes://service.dunes.ch/CustomSDKObject?id='HISVCSVPSYS03.hcloud.healthgrp.com.sg%2Cid:vm-3100939'&dunesName='VC:VirtualMachine']]></value>
+  </attrib>
+  <attrib name="diskSize" type="Array/number" read-only="false">
+    <value encoded="n"><![CDATA[]]></value>
+  </attrib>
+  <attrib name="wfAddHD" type="Workflow" read-only="false">
+    <value encoded="n"><![CDATA[dunes://service.dunes.ch/Workflow?id='BD8080808080808080808080808080801BC280800122528313869552e41805bb1'&dunesName='Workflow']]></value>
+  </attrib>
+  <attrib name="numAdditionalDisks" type="number" read-only="false">
+    <value encoded="n"><![CDATA[]]></value>
+  </attrib>
+  <attrib name="TargetResource" type="ResourceElement" read-only="false">
+    <value encoded="n"><![CDATA[dunes://service.dunes.ch/ResourceElement?id='c594df32-b336-4c6f-a872-b4663e11bbec'&dunesName='ResourceElement']]></value>
+  </attrib>
+  <attrib name="TargetDirectoryOnGuest" type="string" read-only="false">
+    <value encoded="n"><![CDATA[c:\]]></value>
+  </attrib>
+  <attrib name="GuestFileName" type="string" read-only="false">
+    <value encoded="n"><![CDATA[]]></value>
+  </attrib>
+  <attrib name="cmd" type="string" read-only="false">
+    <value encoded="n"><![CDATA[]]></value>
+  </attrib>
+  <attrib name="payload" type="Properties" read-only="false">
+    <value encoded="n"><![CDATA[]]></value>
+  </attrib>
+  <attrib name="result" type="number" read-only="false">
+    <value encoded="n"><![CDATA[]]></value>
+    <description><![CDATA[The pid of the program started.]]></description>
+  </attrib>
+  <attrib name="interactiveSession" type="boolean" read-only="false">
+    <value encoded="n"><![CDATA[false]]></value>
+    <description><![CDATA[This is set to true if the client wants an interactive session in the guest.]]></description>
+  </attrib>
+  <attrib name="programPath" type="string" read-only="false">
+    <value encoded="n"><![CDATA[C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe]]></value>
+    <description><![CDATA[The absolute path to the program to start. For Linux guest operating systems, /bin/bash is used to start the program.  For Solaris guest operating systems, /bin/bash is used to start the program if it exists. Otherwise /bin/sh is used. If /bin/sh is used, then the process ID returned will be that of the shell used to start the program, rather than the program itself, due to the differences in how /bin/sh and /bin/bash work. This PID will still be usable for watching the process with this API to find its exit code and elapsed time. ]]></description>
+  </attrib>
+  <attrib name="workingDirectory" type="string" read-only="false">
+    <value encoded="n"><![CDATA[C:\]]></value>
+    <description><![CDATA[The absolute path of the working directory for the program to be run. VMware recommends explicitly setting the working directory for the program to be run. If this value is unset or is an empty string, the behavior depends on the guest operating system. For Linux guest operating systems, if this value is unset or is an empty string, the working directory will be the home directory of the user associated with the guest authentication. For other guest operating systems, if this value is unset, the behavior is unspecified. ]]></description>
+  </attrib>
+  <attrib name="environment" type="Array/string" read-only="false">
+    <value encoded="n"><![CDATA[]]></value>
+    <description><![CDATA[An array of environment variables, specified in the guest OS notation (eg PATH=c:\bin;c:\windows\system32 or LD_LIBRARY_PATH=/usr/lib:/lib), to be set for the program being run. Note that these are not additions to the default environment variables; they define the complete set available to the program. If none are specified the values are guest dependent. ]]></description>
+  </attrib>
+  <attrib name="letters" type="Array/string" read-only="false">
+    <value encoded="n"><![CDATA[#{#string#A#;#string#B#}#]]></value>
+  </attrib>
+  <attrib name="labels" type="Array/string" read-only="false">
+    <value encoded="n"><![CDATA[#{#string#HD1#;#string#HD2#}#]]></value>
+  </attrib>
+  <workflow-item name="item0" type="end" end-mode="0">
+    <position y="54.5" x="1024.5"/>
+  </workflow-item>
+  <workflow-item name="item3" out-name="item5" type="custom-condition" alt-out-name="item13">
+    <display-name><![CDATA[Custom decision]]></display-name>
+    <script encoded="false"><![CDATA[if(numAdditionalDisks > 0)
+	return true
+else return false
+
+
+/*
+System.debug("vm is " + vm);
+if(vm != null){
+System.debug("Virtual machine is found");
+return true;
+}
+else{
+System.debug("Virtual machine not found");
+return false;
+}
+*/]]></script>
+    <in-binding>
+      <bind name="numAdditionalDisks" type="number" export-name="numAdditionalDisks"/>
+    </in-binding>
+    <position y="0.0" x="124.5"/>
+  </workflow-item>
+  <workflow-item name="item5" out-name="item9" type="custom-condition" alt-out-name="item7">
+    <display-name><![CDATA[Custom decision]]></display-name>
+    <script encoded="false"><![CDATA[System.debug("vm is " + vm);
+var status = vm.runtime.powerState.value;
+if(status == "poweredOn")
+return true;
+else
+return false;]]></script>
+    <in-binding>
+      <bind name="vm" type="VC:VirtualMachine" export-name="vm"/>
+    </in-binding>
+    <position y="0.0" x="264.5"/>
+  </workflow-item>
+  <workflow-item name="item7" out-name="item9" type="link" linked-workflow-id="BD808080808080808080808080808080CCC280800122528313869552e41805bb1">
+    <display-name><![CDATA[Start virtual machine and wait]]></display-name>
+    <in-binding>
+      <bind name="vm" type="VC:VirtualMachine" export-name="vm">
+        <description><![CDATA[Virtual machine to start]]></description>
+      </bind>
+      <bind name="host" type="VC:HostSystem" export-name="NULL">
+        <description><![CDATA[[Optional] The host on which to power on the virtual machine. The host must be part of the same compute resource with which the virtual machine is currently associated. Uses the currently associated host if you do not specify a new host or if you specify an incompatible host.]]></description>
+      </bind>
+    </in-binding>
+    <out-binding/>
+    <description><![CDATA[Starts a virtual machine and waits for VMware Tools to start.]]></description>
+    <position y="73.59090909090908" x="264.5"/>
+  </workflow-item>
+  <workflow-item name="item9" out-name="item6" type="custom-condition" alt-out-name="item8">
+    <display-name><![CDATA[Validate Tools Status]]></display-name>
+    <script encoded="false"><![CDATA[var toolStatus = vm.guest.toolsStatus.value;
+if(String(toolStatus) == "toolsOk")
+return true;
+else
+return false;
+
+]]></script>
+    <in-binding>
+      <bind name="vm" type="VC:VirtualMachine" export-name="vm"/>
+      <bind name="toolStatus" type="string" export-name="toolStatus"/>
+    </in-binding>
+    <position y="0.0" x="504.5"/>
+  </workflow-item>
+  <workflow-item name="item8" out-name="item11" type="task">
+    <display-name><![CDATA[Scriptable task]]></display-name>
+    <script encoded="false"><![CDATA[var errorMessage = "VMware Tools are not running";
+System.error("[Error::] "+ errorMessage);]]></script>
+    <in-binding/>
+    <out-binding/>
+    <position y="73.59090909090908" x="584.5"/>
+  </workflow-item>
+  <workflow-item name="item11" prototype-id="increase-counter" out-name="item9" content-mode="x" type="task">
+    <display-name><![CDATA[Increase counter]]></display-name>
+    <script encoded="false"><![CDATA[//Auto-generated script
+counter = counter+1;]]></script>
+    <in-binding>
+      <bind name="counter" type="number" export-name="counter">
+        <description><![CDATA[counter to increment]]></description>
+      </bind>
+    </in-binding>
+    <out-binding>
+      <bind name="counter" type="number" export-name="counter">
+        <description><![CDATA[counter incremented]]></description>
+      </bind>
+    </out-binding>
+    <description><![CDATA[Increment a counter by one]]></description>
+    <position y="73.59090909090908" x="404.5"/>
+  </workflow-item>
+  <workflow-item name="item6" out-name="item12" type="task">
+    <display-name><![CDATA[read drive letter and label]]></display-name>
+    <script encoded="false"><![CDATA[System.log("Read mount points from payload.....")
+
+var numDisks = ""
+driveLetters = new Array()
+driveLabels = new Array()
+diskSize = new Array()
+
+/*
+var machine = payload.get("machine");
+host = 	vm.ipAddress
+host = 	vm.guest.ipAddress
+System.log("VM IP: "+host)
+
+var vCACVmProperties = machine.get("properties") ;
+for(var i=0; i < numAdditionalDisks; i++){	// by default vm has 1 disk
+	for each (var key in vCACVmProperties.keys) 
+	{	
+		//System.log("Key: "+key+" Value: "+vCACVmProperties.get(key));
+		var j=i+1
+		if(key == "Drive Letter"+j){
+			driveLetters.push('"'+vCACVmProperties.get(key)+'"')
+		}
+		
+		if(key == "Drive Label"+j){
+			driveLabels.push('"'+vCACVmProperties.get(key)+'"')
+		}
+		
+		if(key == "Size"+j){
+			diskSize.push(vCACVmProperties.get(key))
+		}
+	}
+}
+System.log("drive Letters: "+driveLetters)
+System.log("drive Labels: "+driveLabels)
+System.log("disk Sizes: "+diskSize)
+*/]]></script>
+    <in-binding>
+      <bind name="payload" type="Properties" export-name="payload"/>
+      <bind name="vm" type="VC:VirtualMachine" export-name="vm"/>
+      <bind name="numAdditionalDisks" type="number" export-name="numAdditionalDisks"/>
+    </in-binding>
+    <out-binding>
+      <bind name="driveLetters" type="Array/string" export-name="driveLetters"/>
+      <bind name="driveLabels" type="Array/string" export-name="driveLabels"/>
+      <bind name="diskSize" type="Array/number" export-name="diskSize"/>
+    </out-binding>
+    <position y="10.0" x="640.0"/>
+  </workflow-item>
+  <workflow-item name="item10" out-name="item3" type="task">
+    <display-name><![CDATA[get vcvm]]></display-name>
+    <script encoded="false"><![CDATA[
+System.log("payload: "+payload);
+var machine = payload.get("machine");
+
+var hostName=machine.get("name");
+System.log("hostName: " + hostName) ;
+vm = System.getModule("org.VMware.PSO").getvcvmobj(hostName) ;
+
+var vCACVmProperties = machine.get("properties") ;
+for each (var key in vCACVmProperties.keys) 
+{	
+	System.log("Key: "+key+" Value: "+vCACVmProperties.get(key));
+	if(key == "Number Of DIsks"){
+		numAdditionalDisks = vCACVmProperties.get(key)
+		System.log("numAdditionalDisks: "+numAdditionalDisks)
+		break
+	}
+}
+System.log("username: "+vmUsername+", password:"+vmPassword)
+]]></script>
+    <in-binding>
+      <bind name="payload" type="Properties" export-name="payload"/>
+      <bind name="vmUsername" type="string" export-name="vmUsername"/>
+      <bind name="vmPassword" type="SecureString" export-name="vmPassword"/>
+    </in-binding>
+    <out-binding>
+      <bind name="vm" type="VC:VirtualMachine" export-name="vm"/>
+      <bind name="numAdditionalDisks" type="number" export-name="numAdditionalDisks"/>
+    </out-binding>
+    <position y="9.954545454545453" x="0.0"/>
+  </workflow-item>
+  <workflow-item name="item12" out-name="item1" type="task">
+    <display-name><![CDATA[Add disks]]></display-name>
+    <script encoded="false"><![CDATA[/*
+System.log("Adding disks to VM.....")
+
+var inputs = new Properties()
+var token = ""
+for each(var d in diskSize){
+	inputs.put("vm",vm)
+	inputs.put("diskSize",Number(d))
+	token = wfAddHD.execute(inputs)
+	System.getModule("org.VMware.PSO").wfstate(token)
+}
+*/]]></script>
+    <in-binding>
+      <bind name="diskSize" type="Array/number" export-name="diskSize"/>
+      <bind name="wfAddHD" type="Workflow" export-name="wfAddHD"/>
+      <bind name="vm" type="VC:VirtualMachine" export-name="vm"/>
+    </in-binding>
+    <out-binding/>
+    <position y="9.954545454545453" x="784.5"/>
+  </workflow-item>
+  <workflow-item name="item13" out-name="item2" type="task">
+    <display-name><![CDATA[Scriptable task]]></display-name>
+    <script encoded="false"><![CDATA[System.log("No additional disks to add!")]]></script>
+    <in-binding/>
+    <out-binding/>
+    <position y="73.59090909090908" x="65.0"/>
+  </workflow-item>
+  <workflow-item name="item1" out-name="item15" type="link" linked-workflow-id="145bffe5-c91d-4707-8f55-aa90fa6254bd">
+    <display-name><![CDATA[Copy Resource To Guest]]></display-name>
+    <in-binding>
+      <bind name="TargetResource" type="ResourceElement" export-name="TargetResource"/>
+      <bind name="TargetDirectoryOnGuest" type="string" export-name="TargetDirectoryOnGuest"/>
+      <bind name="vmUsername" type="string" export-name="vmUsername"/>
+      <bind name="vmPassword" type="SecureString" export-name="vmPassword"/>
+      <bind name="vm" type="VC:VirtualMachine" export-name="vm"/>
+    </in-binding>
+    <out-binding>
+      <bind name="GuestFileName" type="string" export-name="GuestFileName"/>
+    </out-binding>
+    <position y="10.0" x="920.0"/>
+  </workflow-item>
+  <workflow-item name="item2" type="end" end-mode="0">
+    <position y="63.59090909090908" x="244.5"/>
+  </workflow-item>
+  <workflow-item name="item4" out-name="item0" type="link" linked-workflow-id="C98080808080808080808080808080805E80808001322751030482b80adf61e7c">
+    <display-name><![CDATA[Run program in guest]]></display-name>
+    <in-binding>
+      <bind name="vmUsername" type="string" export-name="vmUsername">
+        <description><![CDATA[Username for the virtual machine]]></description>
+      </bind>
+      <bind name="vmPassword" type="SecureString" export-name="vmPassword">
+        <description><![CDATA[Password for the virtual machine]]></description>
+      </bind>
+      <bind name="vm" type="VC:VirtualMachine" export-name="vm">
+        <description><![CDATA[Virtual machine]]></description>
+      </bind>
+      <bind name="interactiveSession" type="boolean" export-name="interactiveSession">
+        <description><![CDATA[This is set to true if the client wants an interactive session in the guest.]]></description>
+      </bind>
+      <bind name="programPath" type="string" export-name="programPath">
+        <description><![CDATA[The absolute path to the program to start. For Linux guest operating systems, /bin/bash is used to start the program.  For Solaris guest operating systems, /bin/bash is used to start the program if it exists. Otherwise /bin/sh is used. If /bin/sh is used, then the process ID returned will be that of the shell used to start the program, rather than the program itself, due to the differences in how /bin/sh and /bin/bash work. This PID will still be usable for watching the process with this API to find its exit code and elapsed time. ]]></description>
+      </bind>
+      <bind name="arguments" type="string" export-name="cmd">
+        <description><![CDATA[The arguments to the program. In Linux and Solaris guest operating systems, the program will be executed by a guest shell. This allows stdio redirection, but may also require that characters which must be escaped to the shell also be escaped on the command line provided. For Windows guest operating systems, prefixing the command with "cmd /c" can provide stdio redirection. ]]></description>
+      </bind>
+      <bind name="workingDirectory" type="string" export-name="workingDirectory">
+        <description><![CDATA[The absolute path of the working directory for the program to be run. VMware recommends explicitly setting the working directory for the program to be run. If this value is unset or is an empty string, the behavior depends on the guest operating system. For Linux guest operating systems, if this value is unset or is an empty string, the working directory will be the home directory of the user associated with the guest authentication. For other guest operating systems, if this value is unset, the behavior is unspecified. ]]></description>
+      </bind>
+      <bind name="environment" type="Array/string" export-name="environment">
+        <description><![CDATA[An array of environment variables, specified in the guest OS notation (eg PATH=c:\bin;c:\windows\system32 or LD_LIBRARY_PATH=/usr/lib:/lib), to be set for the program being run. Note that these are not additions to the default environment variables; they define the complete set available to the program. If none are specified the values are guest dependent. ]]></description>
+      </bind>
+    </in-binding>
+    <out-binding>
+      <bind name="result" type="number" export-name="result">
+        <description><![CDATA[The pid of the program started.]]></description>
+      </bind>
+    </out-binding>
+    <description><![CDATA[Starts a program in the guest operating system.
+A process started this way can have its status queried with this API. When the process completes, its exit code and end time will be available for 5 minutes after completion.]]></description>
+    <position y="9.954545454545453" x="1204.5"/>
+  </workflow-item>
+  <workflow-item name="item15" out-name="item4" type="task">
+    <display-name><![CDATA[set cmd]]></display-name>
+    <script encoded="false"><![CDATA[var driveLetter = "S,T"
+var driveLabel = "HDD1,HDD2"
+//var driveLetter = letters.toString()
+//var driveLabel = labels.toString()
+
+cmd = ".\\"+TargetResource.name+" \""+driveLetter+"\" \""+driveLabel+"\""
+
+System.log(cmd)]]></script>
+    <in-binding>
+      <bind name="TargetResource" type="ResourceElement" export-name="TargetResource"/>
+      <bind name="letters" type="Array/string" export-name="letters"/>
+      <bind name="labels" type="Array/string" export-name="labels"/>
+    </in-binding>
+    <out-binding>
+      <bind name="cmd" type="string" export-name="cmd"/>
+    </out-binding>
+    <position y="9.954545454545453" x="1064.5"/>
+  </workflow-item>
+  <presentation/>
+</workflow>

@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<config-element id="8c17cce2-20f8-4b0b-a3d8-7c43dabc49fd" version="0.0.0">
+  <display-name><![CDATA[ouSelectionDevhealthgrp]]></display-name>
+  <atts>
+    <att name="DevhealthgrpWindows2012NonProd" type="string" read-only="false">
+      <value encoded="n"><![CDATA[OU=Windows2012,OU=Staging,OU=Hardened,OU=HCloud,DC=Devhealthgrp,DC=com,DC=sg]]></value>
+    </att>
+    <att name="DevhealthgrpWindows2016NonProd" type="string" read-only="false">
+      <value encoded="n"><![CDATA[OU=Windows2016,OU=Staging,OU=Hardened,OU=HCloud,DC=Devhealthgrp,DC=com,DC=sg]]></value>
+    </att>
+    <att name="DevhealthgrpWindows2019NonProd" type="string" read-only="false">
+      <value encoded="n"><![CDATA[OU=Windows2019,OU=Staging,OU=Hardened,OU=HCloud,DC=Devhealthgrp,DC=com,DC=sg]]></value>
+    </att>
+  </atts>
+</config-element>

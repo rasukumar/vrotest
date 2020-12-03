@@ -1,0 +1,193 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<workflow xmlns="http://vmware.com/vco/workflow" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://vmware.com/vco/workflow http://vmware.com/vco/workflow/Workflow-v4.xsd" root-name="item1" object-name="workflow:name=generic" id="0f1351bb-c9bb-403e-9bb4-c06743c671c2" version="0.0.0" api-version="6.0.0" allowed-operations="evf" editor-version="2.0" restartMode="1" resumeFromFailedMode="0">
+  <display-name><![CDATA[Activate Windows License Through VAMT_RSIG]]></display-name>
+  <description><![CDATA[not in use]]></description>
+  <position y="10.0" x="40.0"/>
+  <input>
+    <param name="inputProperties" type="Properties"/>
+  </input>
+  <attrib name="vmUsername" type="string" read-only="false">
+    <value encoded="n"><![CDATA[.\chewbacca]]></value>
+  </attrib>
+  <attrib name="vmPassword" type="SecureString" read-only="false">
+    <value encoded="n"><![CDATA[8BG50N40U73M73X77M30U72N64X63BAC2Z86048D6ZEB23DCDR9CC87CY8DDFB90WF204F73VDAC7975Y1212AC8I1A2FCA7XD486FECNCA7279S9981917Z564F596K80ABCA5PC51694BT3F71A9AS39FF826T5E22FA4Q931D729X41E30D2VDFB82C9Q24FC734KFB6BF0EP9E916BEM]]></value>
+  </attrib>
+  <attrib name="result" type="number" read-only="false">
+    <value encoded="n"><![CDATA[]]></value>
+  </attrib>
+  <attrib name="vamtVm" type="VC:VirtualMachine" read-only="false">
+    <value encoded="n"><![CDATA[dunes://service.dunes.ch/CustomSDKObject?id='HISVCSVPSYS03.hcloud.healthgrp.com.sg%2Cid:vm-272527'&dunesName='VC:VirtualMachine']]></value>
+  </attrib>
+  <attrib name="counter" type="number" read-only="false">
+    <value encoded="n"><![CDATA[1.0]]></value>
+  </attrib>
+  <attrib name="vamtVmUser" type="string" read-only="false">
+    <value encoded="n"><![CDATA[Hcloud\svchispvra03]]></value>
+  </attrib>
+  <attrib name="vamtVmPwd" type="SecureString" read-only="false">
+    <value encoded="n"><![CDATA[15BM63O6AN67N23Y34T32T35P47M6AM25S46I46Z63N76H78M56BC16FL7A5BEFBNA59CC4CL75B5452ZEBE46E9J620154BHDA389F4Z8C0F7B1HEEBF208N3717806P1ABB360OFC010D4K6AF15DCX6556B09J5E0BBBCHC82538FIB3792EL]]></value>
+  </attrib>
+  <attrib name="blueprintType" type="string" read-only="false">
+    <value encoded="n"><![CDATA[]]></value>
+  </attrib>
+  <attrib name="ipAddress" type="string" read-only="false">
+    <value encoded="n"><![CDATA[]]></value>
+  </attrib>
+  <attrib name="cmd" type="string" read-only="false">
+    <value encoded="n"><![CDATA[]]></value>
+  </attrib>
+  <attrib name="keyDescription" type="string" read-only="false">
+    <value encoded="n"><![CDATA[]]></value>
+  </attrib>
+  <attrib name="scriptConfigurationResource" type="ResourceElement" read-only="false">
+    <value encoded="n"><![CDATA[]]></value>
+  </attrib>
+  <attrib name="scriptOutputTextOut" type="string" read-only="false">
+    <value encoded="n"><![CDATA[]]></value>
+  </attrib>
+  <attrib name="wfRunScriptnVmGuest" type="Workflow" read-only="false">
+    <value encoded="n"><![CDATA[dunes://service.dunes.ch/Workflow?id='24c23d4c-12be-4889-aa66-29b8a450f1cd'&dunesName='Workflow']]></value>
+  </attrib>
+  <attrib name="scriptExitCodeOut" type="number" read-only="false">
+    <value encoded="n"><![CDATA[]]></value>
+  </attrib>
+  <attrib name="scriptVariables" type="Array/CompositeType(stringToReplace:string,replacingString:string):scriptVariables" read-only="false">
+    <value encoded="n"><![CDATA[#{##}#]]></value>
+  </attrib>
+  <workflow-item name="item0" type="end" end-mode="0">
+    <position y="55.00615362624329" x="749.6232925379355"/>
+  </workflow-item>
+  <workflow-item name="item1" out-name="item11" type="task">
+    <display-name><![CDATA[Read from payload]]></display-name>
+    <script encoded="false"><![CDATA[/*
+var jsontxt = JSON.stringify(inputProperties, null, 2)
+System.log("jsontxt: " +jsontxt)
+var json = JSON.parse(jsontxt)
+System.log("parsed jsontxt: "+json)
+var vmName = json.resourceNames[0]
+System.log("vm name: "+vmName)
+ipAddress = json.addresses[0][0]
+System.log("IP Address: "+ipAddress)
+
+var custProp = inputProperties.get('customProperties')
+bpType = custProp.get('bpType')
+System.log("Blueprint type: "+ bpType)
+*/
+ipAddress = "10.238.16.5"
+var blueprintType = "Windows2012R2DC"
+
+keyDescription = System.getModule("com.vmware.ihis").readConfigElementValues(blueprintType,"WindowsKeyDescription","web-root");
+System.log("Key Description: "+keyDescription)]]></script>
+    <in-binding>
+      <bind name="inputProperties" type="Properties" export-name="inputProperties"/>
+    </in-binding>
+    <out-binding>
+      <bind name="ipAddress" type="string" export-name="ipAddress"/>
+      <bind name="keyDescription" type="string" export-name="keyDescription"/>
+    </out-binding>
+    <description><![CDATA[Simple task with custom script capability.]]></description>
+    <position y="20.0" x="140.0"/>
+  </workflow-item>
+  <workflow-item name="item7" out-name="item0" type="custom-condition" alt-out-name="item8">
+    <display-name><![CDATA[Validate tools status]]></display-name>
+    <script encoded="false"><![CDATA[System.log("VC VM: "+vm)
+System.log("VC VM name: "+vm.name)
+
+var toolStatus = vm.guest.toolsStatus.value;
+if(String(toolStatus) != "toolsNotInstalled" && String(toolStatus) != "toolsNotRunning")
+return true;
+else
+return false; ]]></script>
+    <in-binding>
+      <bind name="vm" type="VC:VirtualMachine" export-name="vamtVm"/>
+    </in-binding>
+    <out-binding/>
+    <description><![CDATA[Custom decision based on a custom script.]]></description>
+    <position y="60.0" x="260.0"/>
+  </workflow-item>
+  <workflow-item name="item8" out-name="item10" type="task">
+    <display-name><![CDATA[Show message]]></display-name>
+    <script encoded="false"><![CDATA[
+var errorMessage = "VMware Tools are not running";
+System.error("[Error::] "+ errorMessage); ]]></script>
+    <in-binding/>
+    <out-binding/>
+    <description><![CDATA[Simple task with custom script capability.]]></description>
+    <position y="130.0" x="320.0"/>
+  </workflow-item>
+  <workflow-item name="item10" prototype-id="increase-counter" out-name="item7" content-mode="x" type="task">
+    <display-name><![CDATA[Increase counter]]></display-name>
+    <script encoded="false"><![CDATA[//Auto-generated script
+counter = counter + 1;]]></script>
+    <in-binding>
+      <bind name="counter" type="number" export-name="counter">
+        <description><![CDATA[Item to increase]]></description>
+      </bind>
+    </in-binding>
+    <out-binding>
+      <bind name="counter" type="number" export-name="counter">
+        <description><![CDATA[Increased item]]></description>
+      </bind>
+    </out-binding>
+    <description><![CDATA[Increment a counter by one.]]></description>
+    <position y="130.0" x="160.0"/>
+  </workflow-item>
+  <workflow-item name="item11" out-name="item12" type="task">
+    <display-name><![CDATA[Scriptable task]]></display-name>
+    <script encoded="false"><![CDATA[
+
+scriptVariables = new Array();
+scriptVariables = System.getModule("com.vmware.coe.copyAndRunScriptsInGuest").addScriptVariableToArrayOfScriptVariables(scriptVariables,"[KeyDescription]",keyDescription);
+scriptVariables = System.getModule("com.vmware.coe.copyAndRunScriptsInGuest").addScriptVariableToArrayOfScriptVariables(scriptVariables,"[ip]",ipAddress);
+scriptVariables = System.getModule("com.vmware.coe.copyAndRunScriptsInGuest").addScriptVariableToArrayOfScriptVariables(scriptVariables,"[username]",vmUsername);
+scriptVariables = System.getModule("com.vmware.coe.copyAndRunScriptsInGuest").addScriptVariableToArrayOfScriptVariables(scriptVariables,"[password]",vmPassword);
+System.log("scriptVariables: "+ scriptVariables[0].get("replacingString"))
+System.log("scriptVariables: "+ scriptVariables[1].get("replacingString"))
+System.log("scriptVariables: "+ scriptVariables[2].get("replacingString"))
+System.log("scriptVariables: "+ scriptVariables[3].get("replacingString"))
+]]></script>
+    <in-binding>
+      <bind name="vmUsername" type="string" export-name="vmUsername"/>
+      <bind name="vmPassword" type="SecureString" export-name="vmPassword"/>
+      <bind name="ipAddress" type="string" export-name="ipAddress"/>
+      <bind name="keyDescription" type="string" export-name="keyDescription"/>
+    </in-binding>
+    <out-binding>
+      <bind name="scriptVariables" type="Array/CompositeType(stringToReplace:string,replacingString:string):scriptVariables" export-name="scriptVariables"/>
+    </out-binding>
+    <description><![CDATA[Simple task with custom script capability.]]></description>
+    <position y="20.0" x="280.0"/>
+  </workflow-item>
+  <workflow-item name="item12" out-name="item0" type="task">
+    <display-name><![CDATA[Scriptable task]]></display-name>
+    <script encoded="false"><![CDATA[
+
+
+var inputs,currentToken =""
+inputs = new Properties()
+inputs.put("vm",vamtVm)
+inputs.put("vmUsername",vamtVmUser)
+inputs.put("vmPassword",vamtVmPwd)
+inputs.put("scriptVariables",scriptVariables)
+inputs.put("scriptConfigurationResource",scriptConfigurationResource)
+currentToken = wfRunScriptnVmGuest.execute(inputs)
+// System.sleep(15 * 1000)
+System.getModule("com.vmware.ihis").wfState(currentToken);
+]]></script>
+    <in-binding>
+      <bind name="scriptVariables" type="Array/CompositeType(stringToReplace:string,replacingString:string):scriptVariables" export-name="scriptVariables"/>
+      <bind name="wfRunScriptnVmGuest" type="Workflow" export-name="wfRunScriptnVmGuest"/>
+      <bind name="scriptConfigurationResource" type="ResourceElement" export-name="scriptConfigurationResource"/>
+      <bind name="vamtVmUser" type="string" export-name="vamtVmUser"/>
+      <bind name="vamtVmPwd" type="SecureString" export-name="vamtVmPwd"/>
+      <bind name="vamtVm" type="VC:VirtualMachine" export-name="vamtVm"/>
+    </in-binding>
+    <out-binding>
+      <bind name="scriptOutputTextOut" type="string" export-name="scriptOutputTextOut"/>
+      <bind name="scriptExitCodeOut" type="number" export-name="scriptExitCodeOut"/>
+    </out-binding>
+    <description><![CDATA[Simple task with custom script capability.]]></description>
+    <position y="40.0" x="440.0"/>
+  </workflow-item>
+  <presentation/>
+</workflow>

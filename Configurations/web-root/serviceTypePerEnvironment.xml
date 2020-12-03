@@ -1,0 +1,21 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<config-element id="4a1fcc3c-b7b3-4031-a32f-806be2b56f01" version="0.0.0">
+  <display-name><![CDATA[serviceTypePerEnvironment]]></display-name>
+  <atts>
+    <att name="S" type="Array/string" read-only="false">
+      <value encoded="n"><![CDATA[[15:string#Standard]]]></value>
+    </att>
+    <att name="D" type="Array/string" read-only="false">
+      <value encoded="n"><![CDATA[[15:string#Standard]]]></value>
+    </att>
+    <att name="Z" type="Array/string" read-only="false">
+      <value encoded="n"><![CDATA[[15:string#Standard]]]></value>
+    </att>
+    <att name="P" type="Array/string" read-only="false">
+      <value encoded="n"><![CDATA[[15:string#Standard,23:string#Mission Critical,24:string#Business Critical]]]></value>
+    </att>
+    <att name="R" type="Array/string" read-only="false">
+      <value encoded="n"><![CDATA[[15:string#Standard,23:string#Mission Critical,24:string#Business Critical]]]></value>
+    </att>
+  </atts>
+</config-element>

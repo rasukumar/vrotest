@@ -1,0 +1,27 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dunes-script-module name="returnEnvironment" result-type="Array/string" api-version="6.0.0" id="ff1f1d43-8ba8-41d5-8459-38b61c5c39be" version="0.0.0" allowed-operations="vfe" category-name="com.vmware.ihis">
+  <param n="location" t="string"><![CDATA[]]></param>
+  <param n="institutionCluster" t="string"><![CDATA[]]></param>
+  <script encoded="false"><![CDATA[var cat = Server.getConfigurationElementCategoryWithPath("web-root")
+var configEls = cat.configurationElements
+var values = new Array()
+var elementName = "EnvironmentPerLocationInstitutionCluster"
+var inputCategory = institutionCluster+location
+
+if(location != "" && institutionCluster != null){
+    for each(var c in configEls) {
+        if(c.name == elementName){
+            var attr =  c.getAttributeWithKey(inputCategory)
+            values = attr.value
+            break
+        }
+
+    }
+
+}
+
+//System.log(values)
+return values
+
+]]></script>
+</dunes-script-module>

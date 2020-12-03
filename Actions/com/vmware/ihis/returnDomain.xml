@@ -1,0 +1,40 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dunes-script-module name="returnDomain" result-type="Array/string" api-version="6.0.0" id="de4c4fa0-87f6-4bd7-8527-c5e6bd5c6559" version="0.0.0" allowed-operations="vfe" category-name="com.vmware.ihis">
+  <param n="project" t="string"><![CDATA[]]></param>
+  <script encoded="false"><![CDATA[
+var cat = Server.getConfigurationElementCategoryWithPath("web-root")
+var configEls = cat.configurationElements
+var inputCategory = ""
+var values = new Array()
+var elementName = "domainsPerProject"
+
+if(project != "" && project != null){
+    for each(var configEl in configEls) {
+    if(configEl.name == "projectIdToName"){
+        var attrs =  configEl.attributes
+        for each (var attr in attrs){
+                if(attr.value == project)
+                    inputCategory = attr.name
+
+        }
+    }
+
+}
+
+
+for each(var configEl in configEls) {
+    if(configEl.name == elementName){
+        var attr =  configEl.getAttributeWithKey(inputCategory)
+        values = attr.value
+        break
+    }
+
+}
+
+}
+System.log(values)
+return values
+
+
+]]></script>
+</dunes-script-module>

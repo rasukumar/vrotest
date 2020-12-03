@@ -1,0 +1,21 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<config-element id="a292a382-d255-414a-9196-49095b49679a" version="0.0.0">
+  <display-name><![CDATA[institution]]></display-name>
+  <atts>
+    <att name="SHS" type="Array/string" read-only="false">
+      <value encoded="n"><![CDATA[[10:string#CGH,10:string#KKH,10:string#NCC,10:string#NDC,10:string#NHC,10:string#SCH,10:string#SEC,10:string#SGH,10:string#SHP,10:string#SHS,10:string#SKH]]]></value>
+    </att>
+    <att name="NNA" type="Array/string" read-only="false">
+      <value encoded="n"><![CDATA[[10:string#AIC,10:string#AMC,10:string#HIS,10:string#IMH,10:string#JMC,10:string#KTP,10:string#NHG,10:string#NHP,10:string#NHS,10:string#NNI,10:string#NSC,10:string#NTF,10:string#NUH,10:string#NUP,10:string#TTS,10:string#WHC,10:string#YCH]]]></value>
+    </att>
+    <att name="HCLOUD" type="Array/string" read-only="false">
+      <value encoded="n"><![CDATA[[10:string#HIS]]]></value>
+    </att>
+    <att name="COMMON" type="Array/string" read-only="false">
+      <value encoded="n"><![CDATA[[10:string#HIS,10:string#FSS,10:string#MHH,10:string#MOH]]]></value>
+    </att>
+    <att name="NGEMR" type="Array/string" read-only="false">
+      <value encoded="n"><![CDATA[[10:string#HIS]]]></value>
+    </att>
+  </atts>
+</config-element>

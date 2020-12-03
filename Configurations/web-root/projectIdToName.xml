@@ -1,0 +1,21 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<config-element id="db9d8799-f8f0-4e9a-ad6e-4e7ec72ca3fc" version="0.0.0">
+  <display-name><![CDATA[projectIdToName]]></display-name>
+  <atts>
+    <att name="NNA" type="string" read-only="false">
+      <value encoded="n"><![CDATA[85db8866-6d50-4611-9a09-5ac99c93c1c0]]></value>
+    </att>
+    <att name="SHS" type="string" read-only="false">
+      <value encoded="n"><![CDATA[28e82bd6-06f8-4823-863f-52e1a8f850e2]]></value>
+    </att>
+    <att name="COMMON" type="string" read-only="false">
+      <value encoded="n"><![CDATA[c13f9840-3404-4ccf-9b17-572e357ced99]]></value>
+    </att>
+    <att name="INFRA" type="string" read-only="false">
+      <value encoded="n"><![CDATA[e4a5ffd9-c8c0-44e1-96bc-3eab6888da8e]]></value>
+    </att>
+    <att name="NGEMR" type="string" read-only="false">
+      <value encoded="n"><![CDATA[7e583a0f-f736-4bff-8c36-a8a4196d2852]]></value>
+    </att>
+  </atts>
+</config-element>

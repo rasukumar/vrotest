@@ -1,0 +1,21 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<config-element id="f455bb5f-f1f6-4a76-ab2e-4e2f80678fbf" version="0.0.0">
+  <display-name><![CDATA[institutionClusterPerProject]]></display-name>
+  <atts>
+    <att name="COMMON" type="Array/string" read-only="false">
+      <value encoded="n"><![CDATA[[13:string#COMMON]]]></value>
+    </att>
+    <att name="SHS" type="Array/string" read-only="false">
+      <value encoded="n"><![CDATA[[10:string#SHS]]]></value>
+    </att>
+    <att name="NNA" type="Array/string" read-only="false">
+      <value encoded="n"><![CDATA[[10:string#NNA]]]></value>
+    </att>
+    <att name="INFRA" type="Array/string" read-only="false">
+      <value encoded="n"><![CDATA[[13:string#HCLOUD]]]></value>
+    </att>
+    <att name="NGEMR" type="Array/string" read-only="false">
+      <value encoded="n"><![CDATA[[12:string#NGEMR]]]></value>
+    </att>
+  </atts>
+</config-element>

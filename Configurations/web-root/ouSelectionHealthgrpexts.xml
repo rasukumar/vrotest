@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<config-element id="3bc926e6-a38b-4344-8070-9fc0a072d12e" version="0.0.0">
+  <display-name><![CDATA[ouSelectionHealthgrpexts]]></display-name>
+  <atts>
+    <att name="HealthgrpextsWindows2012NonProd" type="string" read-only="false">
+      <value encoded="n"><![CDATA[OU=Windows2012,OU=Hardened,OU=Hcloud,OU=Servers,OU=Healthgrpexts,DC=Healthgrpexts,DC=com,DC=sg]]></value>
+    </att>
+    <att name="HealthgrpextsWindows2016NonProd" type="string" read-only="false">
+      <value encoded="n"><![CDATA[OU=Windows2016,OU=Hardened,OU=Hcloud,OU=Servers,OU=Healthgrpexts,DC=Healthgrpexts,DC=com,DC=sg]]></value>
+    </att>
+    <att name="HealthgrpextsWindows2019NonProd" type="string" read-only="false">
+      <value encoded="n"><![CDATA[OU=Windows2019,OU=Hardened,OU=Hcloud,OU=Servers,OU=Healthgrpexts,DC=Healthgrpexts,DC=com,DC=sg]]></value>
+    </att>
+  </atts>
+</config-element>

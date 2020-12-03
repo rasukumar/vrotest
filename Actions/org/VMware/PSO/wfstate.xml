@@ -1,0 +1,38 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dunes-script-module name="wfstate" result-type="string" api-version="6.0.0" id="30d89e65-2754-47aa-8e37-3ca4854098ed" version="0.0.0" allowed-operations="evf" category-name="org.VMware.PSO">
+  <param n="currentToken" t="string"><![CDATA[]]></param>
+  <script encoded="false"><![CDATA[
+var val = waitToComplete(currentToken);
+
+function waitToComplete(currentToken){
+  var sleepWaitSeconds = 10;
+  var complete = false;
+  while(!complete) {
+  if (currentToken != null && (currentToken.state != "running" && currentToken.state != "waiting" && currentToken.state != "waiting-signal" && currentToken.state != "completed")){
+  	System.warn("Workflow '" + currentToken.name + "' terminated with status '" + currentToken.state + "'");
+	System.error("Workflow '" + currentToken.name + "' terminated with status '" + currentToken.state + "'");
+    complete = true;
+	//return "Workflow '" + currentToken.name + "' terminated with status '" + currentToken.state + "'";
+	throw "Workflow '" + currentToken.name + "' terminated with status '" + currentToken.state + "'";
+  //return false;
+  }
+
+	else if ((currentToken != null) && (currentToken.state == "failed")) {
+		throw "Workflow '" + currentToken.name + "' with status '" + currentToken.state + "'";
+	}
+	  else if ((currentToken != null) && (currentToken.state == "completed")) {
+	  System.log("Workflow '" + currentToken.name + "' completed");
+	  complete = true;
+	  return "Workflow '" + currentToken.name + "' completed";
+	  }
+		if (!complete)
+		  System.sleep(sleepWaitSeconds * 1000);
+	  	}
+	
+	if (currentToken.state == "completed") {
+	  System.log("Workflow '" + currentToken.name + "' completed");
+	   return "Workflow '" + currentToken.name + "' completed";
+	  }
+	
+}]]></script>
+</dunes-script-module>

@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<config-element id="293c5234-5751-4276-9366-b36cde91d66f" version="0.0.0">
+  <display-name><![CDATA[ouSelectionSechealthgrp]]></display-name>
+  <atts>
+    <att name="SechealthgrpWindows2012Prod" type="string" read-only="false">
+      <value encoded="n"><![CDATA[OU=Windows2012,OU=Servers,OU=sechealthgrp,DC=sechealthgrp,DC=com,DC=sg]]></value>
+    </att>
+    <att name="SechealthgrpWindows2016Prod" type="string" read-only="false">
+      <value encoded="n"><![CDATA[OU=Windows2016,OU=Servers,OU=sechealthgrp,DC=sechealthgrp,DC=com,DC=sg]]></value>
+    </att>
+    <att name="SechealthgrpWindows2019Prod" type="string" read-only="false">
+      <value encoded="n"><![CDATA[OU=Windows2019,OU=Servers,OU=sechealthgrp,DC=sechealthgrp,DC=com,DC=sg]]></value>
+    </att>
+  </atts>
+</config-element>

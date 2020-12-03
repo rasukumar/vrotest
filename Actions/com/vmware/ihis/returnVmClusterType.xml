@@ -1,0 +1,61 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dunes-script-module name="returnVmClusterType" result-type="Array/string" api-version="6.0.0" id="b6f1229d-37b9-46f3-9b84-626530719f9e" version="0.0.0" allowed-operations="vfe" category-name="com.vmware.ihis">
+  <param n="project" t="string"><![CDATA[]]></param>
+  <param n="environment" t="string"><![CDATA[]]></param>
+  <param n="networkZone" t="string"><![CDATA[]]></param>
+  <script encoded="false"><![CDATA[
+var cat = Server.getConfigurationElementCategoryWithPath("web-root")
+var configEls = cat.configurationElements
+var inputCategory = ""
+var projectName = ""
+var values = new Array()
+var elementName = "vmClusterType"
+
+if(project != "" && project != null){
+    for each(var configEl in configEls) {
+    if(configEl.name == "projectIdToName"){
+        var attrs =  configEl.attributes
+        for each (var attr in attrs){
+                if(attr.value == project)
+                    projectName = attr.name
+
+        }
+    }
+
+}
+
+if(environment == "P" || environment == "R"){
+    inputCategory = projectName+"_PROD"
+}
+else inputCategory = projectName+"_NONPROD"
+
+if(networkZone == "DMZ"){
+    inputCategory = projectName+"_DMZ"
+}
+
+if(projectName == "COMMON" && networkZone == "ENZ")
+    inputCategory = "COMMON_ENZ"
+
+/*
+if(projectName == "COMMON" && networkZone == "DMZ")
+    inputCategory = "COMMON_DMZ"
+*/
+
+for each(var configEl in configEls) {
+    if(configEl.name == elementName){
+        var attr =  configEl.getAttributeWithKey(inputCategory)
+        values = attr.value
+        break
+    }
+
+}
+
+}
+
+
+System.log(values)
+return values
+
+
+]]></script>
+</dunes-script-module>

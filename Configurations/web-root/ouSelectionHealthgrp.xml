@@ -1,0 +1,30 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<config-element id="299b33f7-3a41-4a7c-9bb0-101fc29cd3eb" version="0.0.0">
+  <display-name><![CDATA[ouSelectionHealthgrp]]></display-name>
+  <atts>
+    <att name="HealthgrpWindows2008Prod" type="string" read-only="false">
+      <value encoded="n"><![CDATA[OU=Windows2008,OU=Production,OU=Hardened,OU=H-Cloud,DC=Healthgrp,DC=com,DC=sg]]></value>
+    </att>
+    <att name="HealthgrpWindows2008NonProd" type="string" read-only="false">
+      <value encoded="n"><![CDATA[OU=Windows2008,OU=Staging,OU=Hardened,OU=H-Cloud,DC=Healthgrp,DC=com,DC=sg]]></value>
+    </att>
+    <att name="HealthgrpWindows2012Prod" type="string" read-only="false">
+      <value encoded="n"><![CDATA[OU=Windows2012,OU=Production,OU=Hardened,OU=H-Cloud,DC=Healthgrp,DC=com,DC=sg]]></value>
+    </att>
+    <att name="HealthgrpWindows2012NonProd" type="string" read-only="false">
+      <value encoded="n"><![CDATA[OU=Windows2012,OU=Staging,OU=Hardened,OU=H-Cloud,DC=Healthgrp,DC=com,DC=sg]]></value>
+    </att>
+    <att name="HealthgrpWindows2016Prod" type="string" read-only="false">
+      <value encoded="n"><![CDATA[OU=Windows2016,OU=Production,OU=Hardened,OU=H-Cloud,DC=Healthgrp,DC=com,DC=sg]]></value>
+    </att>
+    <att name="HealthgrpWindows2016NonProd" type="string" read-only="false">
+      <value encoded="n"><![CDATA[OU=Windows2016,OU=Staging,OU=Hardened,OU=H-Cloud,DC=Healthgrp,DC=com,DC=sg]]></value>
+    </att>
+    <att name="HealthgrpWindows2019NonProd" type="string" read-only="false">
+      <value encoded="n"><![CDATA[OU=Windows2019,OU=Staging,OU=Hardened,OU=H-Cloud,DC=Healthgrp,DC=com,DC=sg]]></value>
+    </att>
+    <att name="HealthgrpWindows2019Prod" type="string" read-only="false">
+      <value encoded="n"><![CDATA[OU=Windows2019,OU=Production,OU=Hardened,OU=H-Cloud,DC=Healthgrp,DC=com,DC=sg]]></value>
+    </att>
+  </atts>
+</config-element>

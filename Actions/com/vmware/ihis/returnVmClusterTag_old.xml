@@ -1,0 +1,36 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dunes-script-module name="returnVmClusterTag_old" result-type="string" api-version="6.0.0" id="fb195b81-f8d2-409b-b188-f7b10ec2dadf" version="0.0.0" allowed-operations="vfe" category-name="com.vmware.ihis">
+  <param n="vmClusterType" t="string"><![CDATA[]]></param>
+  <param n="environment" t="string"><![CDATA[]]></param>
+  <script encoded="false"><![CDATA[
+var tag = ""
+
+if(vmClusterType != "" && vmClusterType != null){
+    var institution = vmClusterType.split(" ")[0]
+    //if(institution == "NHG")
+     //   institution = "NNA"
+        
+    var type = vmClusterType.split(" ")[1]
+    var env = ""
+
+    if(vmClusterType.indexOf("Mission Critical") != -1){
+        type = "CRI"
+    }
+
+    if(vmClusterType.indexOf("Standard") != -1){
+        type = "STD"
+    }
+
+    if(environment == "P")
+        env = "Prod"
+    else if(environment == "R")
+        env = "DR"
+    else env = "NonProd"
+    
+    tag = "HDC-"+institution +"-"+type+"-"+env+"-Zone"
+    System.log("VM Cluster type tag: "+tag)
+   
+}
+
+ return tag]]></script>
+</dunes-script-module>

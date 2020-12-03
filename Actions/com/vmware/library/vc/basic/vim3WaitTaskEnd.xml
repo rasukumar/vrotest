@@ -1,0 +1,138 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dunes-script-module name="vim3WaitTaskEnd" result-type="Any" api-version="6.0.0" id="99afccd7-9fcc-4dc2-82b7-586de690364e" version="1.0.0" allowed-operations="vf" category-name="com.vmware.library.vc.basic">
+  <description><![CDATA[Wait for a VC Task to end.
+When task ended, return the task result if any. ]]></description>
+  <param n="task" t="VC:Task"><![CDATA[Task to Wait for]]></param>
+  <param n="progress" t="boolean"><![CDATA[Log progess while waiting for the task]]></param>
+  <param n="pollRate" t="number"><![CDATA[Polling rate for the task state [seconds]]]></param>
+  <script encoded="false"><![CDATA[var taskEnd = false;
+var error;
+
+var propertyCollector = getPropertyCollector(task)
+var filterSpec = getFilterSpec(task)
+
+//force logging
+progress = true
+
+try {
+	var taskInfo = getTaskInfo(propertyCollector, filterSpec);
+	while (task != null) {
+		if (taskInfo == null) {
+			throw "VIM Task info is null";
+		}
+		if (taskInfo.state == null) {
+			throw "VIM Task state is null";
+		}	
+	
+		var state = taskInfo.state.value;
+		if (state == "success") {
+		    waitCacheUpdate(state, task);
+			break;
+		}
+		else if (state == "error") {
+		    waitCacheUpdate(state, task);
+			if (taskInfo.error.localizedMessage == null) {
+				throw "Task '" + taskInfo.name + "' has encountered an unknown error";
+			}
+			else {
+				throw "Task '" + taskInfo.name + "' error: "+taskInfo.error.localizedMessage;
+			}
+		}
+		else if ((progress) && (state == "running")) {
+			if (taskInfo.progress == null) {
+				System.log(taskInfo.name+"/"+task.id+" " + state);
+				}
+			else {
+				System.log(taskInfo.name+"/"+task.id+" "+ state + " "+taskInfo.progress+" %");
+			}
+		}
+		System.sleep(pollRate*1000);
+		taskInfo = getTaskInfo(propertyCollector, filterSpec);
+	}
+	
+	if (task == null) {
+		throw "VIM Task is null";
+	}
+	else if (progress) {
+		System.log(taskInfo.name+"/"+task.id+" ends with "+taskInfo.state.value);
+	}
+	
+	// Return the Task Result
+	if (task != null && taskInfo != null && taskInfo.result != null) {
+		return VcPlugin.convertToVimManagedObject(task , taskInfo.result);
+	}
+	else {
+		return null;
+	}
+} finally {
+    if (propertyCollector != null) {
+        propertyCollector.destroyPropertyCollector()
+    }
+}
+
+//------------------------------------------------------------------------------------
+function waitCacheUpdate(state, taskObj) {
+    for (var i=0; i<10; i++ ) {
+        if (state == taskObj.info.state.value) {
+            return     
+        }
+        System.sleep(1000);
+    }
+    System.error(taskInfo.name + "/" + task.id + " cache OUT OF sync");
+}
+
+function getPropertyCollector(taskObj) {
+    if (taskObj == null) {
+        return null;
+    }
+    var vc = taskObj.sdkConnection
+	return vc.propertyCollector.createPropertyCollector()	
+}
+
+function getFilterSpec(taskObj) {
+    if (taskObj == null) {
+        return null;
+    }
+    var vc = taskObj.sdkConnection
+	var listView = vc.viewManager.createListView([taskObj.reference])
+    
+	// create an object spec for the beginning of the traversal;
+	var oSpec = new VcObjectSpec()
+	oSpec.obj = listView.reference
+	oSpec.skip = true
+	
+	// create a traversal spec to select all objects in the view
+	var tSpec = new VcTraversalSpec()
+	tSpec.name = 'traverseEntities'
+	tSpec.path = 'view'
+	tSpec.skip = false
+	tSpec.type = 'ListView'
+	
+	// add it to the object spec
+	oSpec.selectSet = [tSpec]
+	
+	var propertySpecs = new Array()
+    // specify the properties for retrieval
+    var pSpec = new VcPropertySpec()
+    pSpec.type = 'Task'
+    pSpec.pathSet = ['info']
+    propertySpecs.push(pSpec)
+
+	var fs = new VcPropertyFilterSpec()
+	fs.objectSet = [ oSpec ]
+	fs.propSet = propertySpecs
+	return fs
+}
+
+function getTaskInfo(propertyCollector, filterSpec) {
+	if (propertyCollector == null) {
+		System.log("Can not get task info - propertyCollector is null")
+        return null;
+    }
+    var vc = propertyCollector.sdkConnection
+	
+	var retrieveOptions = new VcRetrieveOptions()
+	retrieveResult = propertyCollector.retrievePropertiesEx([filterSpec], retrieveOptions)
+	return retrieveResult.objects[0].propSet[0].val
+}]]></script>
+</dunes-script-module>

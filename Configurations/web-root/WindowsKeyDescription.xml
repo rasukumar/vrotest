@@ -1,0 +1,18 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<config-element id="edb5f20d-63e3-448a-a1a9-7a3c319024ff" version="0.0.0">
+  <display-name><![CDATA[WindowsKeyDescription]]></display-name>
+  <atts>
+    <att name="Windows2012DC" type="string" read-only="false">
+      <value encoded="n"><![CDATA[Windows Server 2012 RTM ServerDatacenter Volume:MAK]]></value>
+    </att>
+    <att name="Windows2012R2DC" type="string" read-only="false">
+      <value encoded="n"><![CDATA[Windows Server 12 R2 RTM ServerDatacenter Volume:MAK]]></value>
+    </att>
+    <att name="Windows2016DC" type="string" read-only="false">
+      <value encoded="n"><![CDATA[Windows Server 2016 RTM ServerDatacenter Volume:MAK]]></value>
+    </att>
+    <att name="Windows2019DC" type="string" read-only="false">
+      <value encoded="n"><![CDATA[Windows Server 2016 RTM ServerDatacenter;ServerDatacenterACor Volume:MAK]]></value>
+    </att>
+  </atts>
+</config-element>

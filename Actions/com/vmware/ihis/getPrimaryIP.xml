@@ -1,0 +1,35 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dunes-script-module name="getPrimaryIP" result-type="string" api-version="6.0.0" id="e6532e74-44be-4b61-8796-7277c4f1b8d9" version="0.0.0" allowed-operations="vfe" category-name="com.vmware.ihis">
+  <param n="vm" t="VC:VirtualMachine"><![CDATA[]]></param>
+  <script encoded="false"><![CDATA[
+var ntwkName=""
+var ip=""
+var nics = vm.guest.net; // enumerate all NICs  
+for (var i in nics) {  
+    var nic = nics[i];  
+    ntwkName = nic.network 
+    System.log("Network name: "+ntwkName)
+    if(ntwkName != null && ntwkName != "null"){
+        if(ntwkName.indexOf("_300_") == -1){
+            var ips = nic.ipConfig.ipAddress; // enumerate all IP addresses on this NIC  
+            for (var j in ips) {  
+                ip = ips[j];  
+                System.log("IP -> " + ip.ipAddress);  
+            }  
+            break   
+        }     
+    }
+    else {
+        var ips = nic.ipConfig.ipAddress; // enumerate all IP addresses on this NIC  
+        for (var j in ips) {  
+            ip = ips[j];  
+            System.log("IP -> " + ip.ipAddress);  
+        }  
+        break 
+
+    }
+    
+}                                                                              
+
+return ip.ipAddress;]]></script>
+</dunes-script-module>

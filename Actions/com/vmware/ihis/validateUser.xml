@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dunes-script-module name="validateUser" result-type="boolean" api-version="6.0.0" id="b55618af-dccd-4aee-a00e-ea9005e59d82" version="0.0.0" allowed-operations="vfe" category-name="com.vmware.ihis">
+  <param n="username" t="string"><![CDATA[]]></param>
+  <param n="adHost" t="AD:AdHost"><![CDATA[]]></param>
+  <script encoded="false"><![CDATA[
+var userArray = ActiveDirectory.search("User", username, adHost) 
+System.log(userArray[0])
+if(userArray != null)
+    return true
+else 
+return false]]></script>
+</dunes-script-module>

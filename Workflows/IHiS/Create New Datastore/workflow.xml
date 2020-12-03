@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:workflow xmlns:ns2="http://vmware.com/vco/workflow" root-name="item2" object-name="Workflow:name=generic" id="6a181cbc-59e7-4233-a642-32a46b53ac3d" editor-version="2.0" version="1.2.2" api-version="6.0.0" allowed-operations="vef" restartMode="1" resumeFromFailedMode="0">
+    <display-name>Create New Datastore</display-name>
+    <description>Creates a VMFS volume for all available disks of a specified host.</description>
+    <position y="40.0" x="180.0"/>
+    <input>
+        <param name="host" type="VC:HostSystem">
+            <description>Host on which the VMFS will be created</description>
+        </param>
+        <param name="vmfsVersion" type="number">
+            <description>VMFS version</description>
+        </param>
+    </input>
+    <output>
+        <param name="createdDatastores" type="Array/VC:Datastore">
+            <description>The created datastores (if any)</description>
+        </param>
+    </output>
+    <attrib name="errorMessage" type="string">
+        <value encoded="n"></value>
+        <description>The error message if there is any exception</description>
+    </attrib>
+    <workflow-item name="item0" out-name="item1" catch-name="item3" throw-bind-name="errorMessage" type="task" comparator="0">
+        <display-name>Create VMFS for all available disks</display-name>
+        <script encoded="false">if(vmfsVersion !=6 &amp;&amp; vmfsVersion !=5){
+	throw "Invalid VMFS version " + vmfsVersion;
+}
+
+createdDatastores = new Array();
+
+var hostDatastoreSystem = VcPlugin.convertToVimManagedObject( host, host.configManager.datastoreSystem );
+
+// Get available disks
+var freeDisks = hostDatastoreSystem.queryAvailableDisksForVmfs();
+if ( freeDisks != null  &amp;&amp;  freeDisks.length &gt; 0 )  {
+	System.log( "Found " + freeDisks.length + " available disks for VMFS creation:" );
+	for each ( var disk in freeDisks )  {
+		try {
+			var devicePath = disk.devicePath;
+			// Compute the size of the disk in GB
+			var size = (disk.capacity.block * disk.capacity.blockSize) / 1024 / 1024 / 1024;
+	
+			// Generate the volume name
+			var volumeName = devicePath.substring( devicePath.lastIndexOf("/")+1 ).replace( new RegExp(":", "g"), "_" );
+	
+			// Log the creation
+			System.log( "\tA datastore for disk.devicePath : '" + devicePath + "' will be created (capacity : " + size + " GB, name : '" + volumeName + "')" );
+			Server.log( "A datastore will be created", "devicePath : '" + devicePath + "' - capacity : " + size + " GB, name : '" + volumeName + "'" );
+	
+			// Query the available datastore create options 
+			var vmfsDsCreateOptions;
+			var isAPIVersion5Compatible = System.getModule("com.vmware.library.vc.storage").isAPICompatible(host, "5");
+			if ( isAPIVersion5Compatible ) {
+			  	vmfsDsCreateOptions = hostDatastoreSystem.queryVmfsDatastoreCreateOptions( devicePath , vmfsVersion);
+			} else {
+				vmfsDsCreateOptions = hostDatastoreSystem.queryVmfsDatastoreCreateOptions( devicePath );
+			}
+	
+			// Set the datastore name to the disk name
+			vmfsDsCreateOptions[0].spec.vmfs.volumeName = volumeName;
+			var createdDs = hostDatastoreSystem.createVmfsDatastore( vmfsDsCreateOptions[0].spec );
+			createdDatastores.push( createdDs );
+		}
+		catch (ex) {
+			System.error("Unable to create the datastore. Reason: " + ex);
+			Server.error("Unable to create the datastore. Reason: " + ex);
+		}
+	}
+}
+else  {
+	System.log( "No available disk found" );
+}
+</script>
+        <in-binding>
+            <bind name="host" type="VC:HostSystem" export-name="host"/>
+            <bind name="vmfsVersion" type="number" export-name="vmfsVersion"/>
+        </in-binding>
+        <out-binding>
+            <bind name="createdDatastores" type="Array/VC:Datastore" export-name="createdDatastores"/>
+            <bind name="errorMessage" type="string" export-name="errorMessage"/>
+        </out-binding>
+        <position y="120.0" x="140.0"/>
+    </workflow-item>
+    <workflow-item name="item1" type="end" end-mode="0" comparator="0">
+        <in-binding/>
+        <out-binding/>
+        <position y="150.0" x="180.0"/>
+    </workflow-item>
+    <workflow-item name="item2" out-name="item0" catch-name="item3" throw-bind-name="errorMessage" type="task" script-module="com.vmware.library.vc.storage/rescanAll" comparator="0">
+        <display-name>rescanAll</display-name>
+        <script encoded="false">//Auto generated script, cannot be modified !
+System.getModule("com.vmware.library.vc.storage").rescanAll(host) ;</script>
+        <in-binding>
+            <bind name="host" type="VC:HostSystem" export-name="host"/>
+        </in-binding>
+        <out-binding/>
+        <description>Rescans all HBA, VMFS and StorageSystem of a HostSystem.</description>
+        <position y="80.0" x="140.0"/>
+    </workflow-item>
+    <workflow-item name="item3" throw-bind-name="errorMessage" type="end" end-mode="1" comparator="0">
+        <in-binding/>
+        <out-binding/>
+        <position y="90.0" x="360.0"/>
+    </workflow-item>
+    <presentation>
+        <p-step>
+            <title>Choose a host</title>
+            <p-group>
+                <title>Host</title>
+                <desc>Select a vCenter Server host.</desc>
+                <p-param name="host">
+                    <desc>Host on which the VMFS will be created</desc>
+                    <p-qual kind="static" name="mandatory" type="boolean">true</p-qual>
+                    <p-qual kind="static" name="show-select-as" type="string">list</p-qual>
+                </p-param>
+            </p-group>
+            <p-group>
+                <title>File System Version</title>
+                <desc>Select the VMFS 5 option to enable additional capabilities, such as 2TB+ support. VMFS-5 is not supported by hosts with an ESX version older than 5.0.
+Select the VMFS 3 option if the datastore will be accessed by legacy hosts.</desc>
+                <p-param name="vmfsVersion">
+                    <desc>VMFS version</desc>
+                    <p-qual kind="static" name="mandatory" type="boolean">true</p-qual>
+                    <p-qual kind="static" name="genericEnumeration" type="Array/number">#{#string#5#;#string#3#}#</p-qual>
+                </p-param>
+                <p-qual kind="ognl" name="visible" type="boolean">GetAction("com.vmware.library.vc.storage","isAPICompatible").call( #host , "5" )</p-qual>
+            </p-group>
+        </p-step>
+    </presentation>
+</ns2:workflow>

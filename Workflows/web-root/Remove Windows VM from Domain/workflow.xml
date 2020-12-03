@@ -1,0 +1,221 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<workflow xmlns="http://vmware.com/vco/workflow" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://vmware.com/vco/workflow http://vmware.com/vco/workflow/Workflow-v4.xsd" root-name="item9" object-name="workflow:name=generic" id="bcf137d4-32e2-49f9-a76d-dc3a1556db14" version="0.0.0" api-version="6.0.0" allowed-operations="evf" editor-version="2.0" restartMode="1" resumeFromFailedMode="0">
+  <display-name><![CDATA[Remove Windows VM from Domain]]></display-name>
+  <position y="40.0" x="20.0"/>
+  <input>
+    <param name="inputProperties" type="Properties"/>
+  </input>
+  <attrib name="dUsername" type="string" read-only="false">
+    <value encoded="n"><![CDATA[]]></value>
+  </attrib>
+  <attrib name="dPassword" type="SecureString" read-only="false">
+    <value encoded="n"><![CDATA[]]></value>
+  </attrib>
+  <attrib name="cmd" type="string" read-only="false">
+    <value encoded="n"><![CDATA[]]></value>
+  </attrib>
+  <attrib name="vmUsername" type="string" read-only="false">
+    <value encoded="n"><![CDATA[.\chewbacca]]></value>
+  </attrib>
+  <attrib name="vmPassword" type="SecureString" read-only="false">
+    <value encoded="n"><![CDATA[8BG50N40U73M73X77M30U72N64X63BAC2Z86048D6ZEB23DCDR9CC87CY8DDFB90WF204F73VDAC7975Y1212AC8I1A2FCA7XD486FECNCA7279S9981917Z564F596K80ABCA5PC51694BT3F71A9AS39FF826T5E22FA4Q931D729X41E30D2VDFB82C9Q24FC734KFB6BF0EP9E916BEM]]></value>
+  </attrib>
+  <attrib name="interactiveSession" type="boolean" read-only="false">
+    <value encoded="n"><![CDATA[false]]></value>
+  </attrib>
+  <attrib name="programPath" type="string" read-only="false">
+    <value encoded="n"><![CDATA[C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe]]></value>
+  </attrib>
+  <attrib name="workingDirectory" type="string" read-only="false">
+    <value encoded="n"><![CDATA[]]></value>
+  </attrib>
+  <attrib name="environment" type="Array/string" read-only="false">
+    <value encoded="n"><![CDATA[#{##}#]]></value>
+  </attrib>
+  <attrib name="result" type="number" read-only="false">
+    <value encoded="n"><![CDATA[]]></value>
+  </attrib>
+  <attrib name="domain" type="string" read-only="false">
+    <value encoded="n"><![CDATA[]]></value>
+  </attrib>
+  <attrib name="vm" type="VC:VirtualMachine" read-only="false">
+    <value encoded="n"><![CDATA[]]></value>
+  </attrib>
+  <attrib name="wfRunProgramInGuest" type="Workflow" read-only="false">
+    <value encoded="n"><![CDATA[dunes://service.dunes.ch/Workflow?id='C98080808080808080808080808080805E80808001322751030482b80adf61e7c'&dunesName='Workflow']]></value>
+  </attrib>
+  <attrib name="vmName" type="string" read-only="false">
+    <value encoded="n"><![CDATA[]]></value>
+  </attrib>
+  <workflow-item name="item0" type="end" end-mode="0">
+    <position y="150.0" x="600.0"/>
+  </workflow-item>
+  <workflow-item name="item1" out-name="item4" type="task">
+    <display-name><![CDATA[Set command]]></display-name>
+    <script encoded="false"><![CDATA[
+
+cmd = "cmd.exe /c 'netdom remove "+vm.name+" /UserD:"+dUsername+" /PasswordD:"+dPassword+"'"
+System.log(cmd)
+]]></script>
+    <in-binding>
+      <bind name="dUsername" type="string" export-name="dUsername"/>
+      <bind name="dPassword" type="SecureString" export-name="dPassword"/>
+      <bind name="vm" type="VC:VirtualMachine" export-name="vm"/>
+    </in-binding>
+    <out-binding>
+      <bind name="cmd" type="string" export-name="cmd"/>
+    </out-binding>
+    <description><![CDATA[Simple task with custom script capability.]]></description>
+    <position y="50.0" x="440.0"/>
+  </workflow-item>
+  <workflow-item name="item3" out-name="item6" type="task">
+    <display-name><![CDATA[Read from payload]]></display-name>
+    <script encoded="false"><![CDATA[
+var jsontxt = JSON.stringify(inputProperties, null, 2)
+System.log("jsontxt: " +jsontxt)
+var json = JSON.parse(jsontxt)
+System.log("parsed jsontxt: "+json)
+vmName = json.resourceNames[0]
+System.log("vm name: "+vmName)
+var ipAddress = json.addresses[0][0]
+System.log("IP Address: "+ipAddress)
+
+vm = System.getModule("com.vmware.ihis").getVmFromVcenterByName(vmName);
+
+var custProp = inputProperties.get('customProperties')
+
+var env = custProp.get('environment')
+System.log("Environment: "+ env)
+if(env == "P" || env == "R")
+    env = "Prod"
+else env = "NonProd"
+
+System.log("Environment: "+ env)
+
+// get vm credentials according to prod/nonprod
+var configElements = Server.findAllForType("ConfigurationElement","name='vmCredentials'")
+var creds = "" 
+var attr =  configElements[0].getAttributeWithKey(env)
+creds = attr.value
+
+vmUsername =  creds.username
+vmPassword = creds.password
+
+var domain = custProp.get('domain')
+System.log("Domain name: "+ domain)
+var domainPrefix = domain.split(".")[0]
+var configElements = Server.findAllForType("ConfigurationElement","name='domainCredentials'")
+attr =  configElements[0].getAttributeWithKey(domainPrefix)
+creds = attr.value
+
+dUsername =  creds.username
+dPassword = creds.password]]></script>
+    <in-binding>
+      <bind name="inputProperties" type="Properties" export-name="inputProperties"/>
+    </in-binding>
+    <out-binding>
+      <bind name="vm" type="VC:VirtualMachine" export-name="vm"/>
+      <bind name="vmName" type="string" export-name="vmName"/>
+      <bind name="dUsername" type="string" export-name="dUsername"/>
+      <bind name="dPassword" type="SecureString" export-name="dPassword"/>
+      <bind name="vmUsername" type="string" export-name="vmUsername"/>
+      <bind name="vmPassword" type="SecureString" export-name="vmPassword"/>
+    </out-binding>
+    <description><![CDATA[Simple task with custom script capability.]]></description>
+    <position y="50.0" x="200.0"/>
+  </workflow-item>
+  <workflow-item name="item4" out-name="item0" type="task">
+    <display-name><![CDATA[Run program in guest]]></display-name>
+    <script encoded="false"><![CDATA[
+
+if(vm.name != vm.hostName){
+
+    var inputs,currentToken =""
+
+    System.log("cmd: "+cmd)
+    inputs = new Properties()
+    inputs.put("interactiveSession",interactiveSession)
+    inputs.put("workingDirectory",workingDirectory)
+    inputs.put("environment",environment)
+    inputs.put("programPath",programPath)
+    inputs.put("vmPassword",vmPassword)
+    inputs.put("vmUsername",vmUsername)
+    inputs.put("arguments",cmd)
+    inputs.put("vm",vm)
+    currentToken = wfRunProgramInGuest.execute(inputs)
+   // System.sleep(15 * 1000)
+   System.getModule("com.vmware.ihis").wfState(currentToken);
+}
+]]></script>
+    <in-binding>
+      <bind name="wfRunProgramInGuest" type="Workflow" export-name="wfRunProgramInGuest"/>
+      <bind name="cmd" type="string" export-name="cmd"/>
+      <bind name="vmUsername" type="string" export-name="vmUsername"/>
+      <bind name="vmPassword" type="SecureString" export-name="vmPassword"/>
+      <bind name="interactiveSession" type="boolean" export-name="interactiveSession"/>
+      <bind name="programPath" type="string" export-name="programPath"/>
+      <bind name="workingDirectory" type="string" export-name="workingDirectory"/>
+      <bind name="environment" type="Array/string" export-name="environment"/>
+      <bind name="vm" type="VC:VirtualMachine" export-name="vm"/>
+    </in-binding>
+    <out-binding>
+      <bind name="result" type="number" export-name="result"/>
+    </out-binding>
+    <description><![CDATA[Simple task with custom script capability.]]></description>
+    <position y="50.0" x="560.0"/>
+  </workflow-item>
+  <workflow-item name="item5" type="end" end-mode="0">
+    <position y="150.0" x="360.0"/>
+  </workflow-item>
+  <workflow-item name="item6" out-name="item1" type="custom-condition" alt-out-name="item7">
+    <display-name><![CDATA[Validate VM]]></display-name>
+    <script encoded="false"><![CDATA[if(vm != null && vm != undefined)
+    return true
+else return false]]></script>
+    <in-binding>
+      <bind name="vm" type="VC:VirtualMachine" export-name="vm"/>
+    </in-binding>
+    <out-binding/>
+    <description><![CDATA[Custom decision based on a custom script.]]></description>
+    <position y="40.0" x="320.0"/>
+  </workflow-item>
+  <workflow-item name="item7" out-name="item5" type="task">
+    <display-name><![CDATA[Scriptable task]]></display-name>
+    <script encoded="false"><![CDATA[
+System.log("VM '"+vmName+"' not found in vcenter.")]]></script>
+    <in-binding>
+      <bind name="vmName" type="string" export-name="vmName"/>
+    </in-binding>
+    <out-binding/>
+    <description><![CDATA[Simple task with custom script capability.]]></description>
+    <position y="100.0" x="320.0"/>
+  </workflow-item>
+  <workflow-item name="item8" type="end" end-mode="0">
+    <in-binding/>
+    <position y="149.0" x="138.0"/>
+  </workflow-item>
+  <workflow-item name="item9" out-name="item3" type="custom-condition" alt-out-name="item10">
+    <display-name><![CDATA[Joined to domain?]]></display-name>
+    <script encoded="false"><![CDATA[var custProp = inputProperties.get('customProperties')
+var domainJoinYN = custProp.get('domainJoinYN')
+System.log("domainJoinYN: "+ domainJoinYN)
+
+return domainJoinYN]]></script>
+    <in-binding>
+      <bind name="inputProperties" type="Properties" export-name="inputProperties"/>
+    </in-binding>
+    <out-binding/>
+    <description><![CDATA[Custom decision based on a custom script.]]></description>
+    <position y="39.06283896538097" x="104.24408412225554"/>
+  </workflow-item>
+  <workflow-item name="item10" out-name="item8" type="task">
+    <display-name><![CDATA[Scriptable task]]></display-name>
+    <script encoded="false"><![CDATA[
+System.log("VM was not joined to the domain.")]]></script>
+    <in-binding/>
+    <out-binding/>
+    <description><![CDATA[Simple task with custom script capability.]]></description>
+    <position y="98.81699315853172" x="95.27778755779929"/>
+  </workflow-item>
+  <presentation/>
+</workflow>

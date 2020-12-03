@@ -1,0 +1,158 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<workflow xmlns="http://vmware.com/vco/workflow" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://vmware.com/vco/workflow http://vmware.com/vco/workflow/Workflow-v4.xsd" root-name="item5" object-name="workflow:name=generic" id="5b1822f6-8ba1-46f5-aa05-4397f81b757f" version="0.0.0" api-version="6.0.0" allowed-operations="evf" editor-version="2.0" restartMode="1" resumeFromFailedMode="0">
+  <display-name><![CDATA[Set gateway and DNS on VM]]></display-name>
+  <position y="50.0" x="27.0"/>
+  <input>
+    <param name="inputProperties" type="Properties"/>
+  </input>
+  <attrib name="vmUsername" type="string" read-only="false" conf-id="37abddc7-c093-4fed-857b-38273fe27da5" conf-key="vmLocalUsername">
+    <value encoded="n"><![CDATA[]]></value>
+  </attrib>
+  <attrib name="vmPassword" type="SecureString" read-only="false" conf-id="37abddc7-c093-4fed-857b-38273fe27da5" conf-key="vmLocalPassword"/>
+  <attrib name="interactiveSession" type="boolean" read-only="false">
+    <value encoded="n"><![CDATA[false]]></value>
+  </attrib>
+  <attrib name="programPath" type="string" read-only="false">
+    <value encoded="n"><![CDATA[C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe]]></value>
+  </attrib>
+  <attrib name="workingDirectory" type="string" read-only="false">
+    <value encoded="n"><![CDATA[]]></value>
+  </attrib>
+  <attrib name="environment" type="Array/string" read-only="false">
+    <value encoded="n"><![CDATA[#{##}#]]></value>
+  </attrib>
+  <attrib name="result" type="Array/number" read-only="false">
+    <value encoded="n"><![CDATA[#{##}#]]></value>
+  </attrib>
+  <attrib name="arguments" type="Array/string" read-only="false">
+    <value encoded="n"><![CDATA[#{##}#]]></value>
+  </attrib>
+  <attrib name="wfRPIG" type="Workflow" read-only="false">
+    <value encoded="n"><![CDATA[dunes://service.dunes.ch/Workflow?id='C98080808080808080808080808080805E80808001322751030482b80adf61e7c'&dunesName='Workflow']]></value>
+  </attrib>
+  <attrib name="dnsServers" type="Array/string" read-only="false">
+    <value encoded="n"><![CDATA[#{##}#]]></value>
+  </attrib>
+  <attrib name="gateway" type="string" read-only="false">
+    <value encoded="n"><![CDATA[]]></value>
+  </attrib>
+  <attrib name="vm" type="VC:VirtualMachine" read-only="false">
+    <value encoded="n"><![CDATA[]]></value>
+  </attrib>
+  <workflow-item name="item0" type="end" end-mode="0">
+    <position y="67.71501883674868" x="754.5287932525588"/>
+  </workflow-item>
+  <workflow-item name="item1" out-name="item4" type="task">
+    <display-name><![CDATA[Read input]]></display-name>
+    <script encoded="false"><![CDATA[
+arguments = new Array()
+
+//cmd = "Set-DnsClientServerAddress -InterfaceAlias Ethernet0 -ServerAddresses @(\"8.8.8.8\",\"8.8.4.4\")"
+//cmd = "echo \"Set-DnsClientServerAddress\ -InterfaceAlias Ethernet0 -ServerAddresses @('8.8.8.8','8.8.4.4')\" > C:\\Users\\Administrator.VRATEST-040\\Desktop\\out2.txt"
+
+cmd = "cmd.exe /c 'netsh interface ipv4 add address \"Ethernet0\" gateway="+gateway+" gwmetric=1'"
+arguments.push(cmd)
+cmd = "cmd.exe /c 'netsh interface ipv4 set dnsservers \"Ethernet0\" static "+dnsServers[0]+"'"
+arguments.push(cmd)
+
+if(dnsServers.length == 2){
+    cmd = "cmd.exe /c 'netsh interface ipv4 add dnsservers \"Ethernet0\" "+dnsServers[1]+" index=2'"
+    arguments.push(cmd)
+}
+
+cmd = "cmd.exe /c 'netsh interface set interface name= \"Ethernet0\" newname= \"PROD\"'"
+arguments.push(cmd)
+cmd = "cmd.exe /c 'netsh interface set interface name= \"Ethernet1\" newname= \"BKP_LAN\"'"
+arguments.push(cmd)
+System.log(arguments)
+]]></script>
+    <in-binding>
+      <bind name="gateway" type="string" export-name="gateway"/>
+      <bind name="dnsServers" type="Array/string" export-name="dnsServers"/>
+    </in-binding>
+    <out-binding>
+      <bind name="arguments" type="Array/string" export-name="arguments"/>
+    </out-binding>
+    <description><![CDATA[Simple task with custom script capability.]]></description>
+    <position y="70.0" x="200.0"/>
+  </workflow-item>
+  <workflow-item name="item4" out-name="item0" type="task">
+    <display-name><![CDATA[Run program in guest]]></display-name>
+    <script encoded="false"><![CDATA[
+var inputs,currentToken =""
+
+for each(var arg in arguments) {
+    System.log("cmd 1: "+arg)
+    inputs = new Properties()
+    inputs.put("interactiveSession",interactiveSession)
+    inputs.put("workingDirectory",workingDirectory)
+    inputs.put("environment",environment)
+    inputs.put("programPath",programPath)
+    inputs.put("vmPassword",vmPassword)
+    inputs.put("vmUsername",vmUsername)
+    inputs.put("arguments",arg)
+    inputs.put("vm",vm)
+    currentToken = wfRPIG.execute(inputs)
+   // System.sleep(15 * 1000)
+   System.getModule("com.vmware.ihis").wfState(currentToken);
+}
+]]></script>
+    <in-binding>
+      <bind name="wfRPIG" type="Workflow" export-name="wfRPIG"/>
+      <bind name="vmUsername" type="string" export-name="vmUsername"/>
+      <bind name="vmPassword" type="SecureString" export-name="vmPassword"/>
+      <bind name="interactiveSession" type="boolean" export-name="interactiveSession"/>
+      <bind name="programPath" type="string" export-name="programPath"/>
+      <bind name="workingDirectory" type="string" export-name="workingDirectory"/>
+      <bind name="environment" type="Array/string" export-name="environment"/>
+      <bind name="arguments" type="Array/string" export-name="arguments"/>
+      <bind name="vm" type="VC:VirtualMachine" export-name="vm"/>
+    </in-binding>
+    <out-binding/>
+    <description><![CDATA[Simple task with custom script capability.]]></description>
+    <position y="63.684210526315795" x="371.57894736842104"/>
+  </workflow-item>
+  <workflow-item name="item5" out-name="item1" type="task">
+    <display-name><![CDATA[Read from payload]]></display-name>
+    <script encoded="false"><![CDATA[var jsontxt = JSON.stringify(inputProperties, null, 2)
+System.log("jsontxt: " +jsontxt)
+var json = JSON.parse(jsontxt)
+System.log("parsed jsontxt: "+json)
+var vmName = json.resourceNames[0]
+System.log("vm name: "+vmName)
+//var ipAddress = json.addresses[0][0]
+//System.log("IP Address: "+ipAddress)
+vm = System.getModule("com.vmware.ihis").getVmFromVcenterByName(vmName);
+var ipAddress = System.getModule("com.vmware.ihis").getPrimaryIP(vm);
+System.log("IP Address: "+ipAddress)
+
+var custProp = inputProperties.get('customProperties')
+var locn = custProp.get('location')
+System.log("Location: "+ locn)
+
+var domain = custProp.get('domain'); 
+domain = domain.split(".")[0]
+System.log("domain: "+domain)
+
+var ipArray = ipAddress.split(".")
+gateway = ipArray[0] + "." + ipArray[1] + "." + ipArray[2] + ".1"
+System.log("Gateway IP: "+gateway)
+
+var inputCat = locn + "" + domain.toUpperCase()
+dnsServers = new Array()
+dnsServers = System.getModule("com.vmware.ihis").readConfigElementValues(inputCat,"dnsServerSelection","web-root");
+System.log("DNS Servers: "+dnsServers)
+]]></script>
+    <in-binding>
+      <bind name="inputProperties" type="Properties" export-name="inputProperties"/>
+    </in-binding>
+    <out-binding>
+      <bind name="gateway" type="string" export-name="gateway"/>
+      <bind name="dnsServers" type="Array/string" export-name="dnsServers"/>
+      <bind name="vm" type="VC:VirtualMachine" export-name="vm"/>
+    </out-binding>
+    <description><![CDATA[Simple task with custom script capability.]]></description>
+    <position y="59.684210526315795" x="83.36842105263159"/>
+  </workflow-item>
+  <presentation/>
+</workflow>

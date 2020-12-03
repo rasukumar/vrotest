@@ -1,0 +1,30 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<config-element id="347ac103-d360-424f-8814-dff074466803" version="0.0.0">
+  <display-name><![CDATA[ouSelectionHcloud]]></display-name>
+  <atts>
+    <att name="HcloudWindows2008Prod" type="string" read-only="false">
+      <value encoded="n"><![CDATA[OU=Windows2008,OU=Production,OU=Hardened,OU=Hcloud,DC=Hcloud,DC=Healthgrp,DC=com,DC=sg]]></value>
+    </att>
+    <att name="HcloudWindows2008NonProd" type="string" read-only="false">
+      <value encoded="n"><![CDATA[OU=Windows2008,OU=Staging,OU=Hardened,OU=Hcloud,DC=Hcloud,DC=Healthgrp,DC=com,DC=sg]]></value>
+    </att>
+    <att name="HcloudWindows2012Prod" type="string" read-only="false">
+      <value encoded="n"><![CDATA[OU=Windows2012,OU=Production,OU=Hardened,OU=Hcloud,DC=Hcloud,DC=Healthgrp,DC=com,DC=sg]]></value>
+    </att>
+    <att name="HcloudWindows2012NonProd" type="string" read-only="false">
+      <value encoded="n"><![CDATA[OU=Windows2012,OU=Staging,OU=Hardened,OU=Hcloud,DC=Hcloud,DC=Healthgrp,DC=com,DC=sg]]></value>
+    </att>
+    <att name="HcloudWindows2016Prod" type="string" read-only="false">
+      <value encoded="n"><![CDATA[OU=Windows2016,OU=Production,OU=Hardened,OU=Hcloud,DC=Hcloud,DC=Healthgrp,DC=com,DC=sg]]></value>
+    </att>
+    <att name="HcloudWindows2016NonProd" type="string" read-only="false">
+      <value encoded="n"><![CDATA[OU=Windows2016,OU=Staging,OU=Hardened,OU=Hcloud,DC=Hcloud,DC=Healthgrp,DC=com,DC=sg]]></value>
+    </att>
+    <att name="HcloudWindows2019NonProd" type="string" read-only="false">
+      <value encoded="n"><![CDATA[OU=Windows2019,OU=Staging,OU=Hardened,OU=Hcloud,DC=Hcloud,DC=Healthgrp,DC=com,DC=sg]]></value>
+    </att>
+    <att name="HcloudWindows2019Prod" type="string" read-only="false">
+      <value encoded="n"><![CDATA[OU=Windows2019,OU=Production,OU=Hardened,OU=Hcloud,DC=Hcloud,DC=Healthgrp,DC=com,DC=sg]]></value>
+    </att>
+  </atts>
+</config-element>

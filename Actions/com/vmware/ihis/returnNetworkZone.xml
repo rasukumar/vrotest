@@ -1,0 +1,48 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dunes-script-module name="returnNetworkZone" result-type="Array/string" api-version="6.0.0" id="a911fe18-ecc7-4f6e-82c8-e5338e798459" version="0.0.0" allowed-operations="vfe" category-name="com.vmware.ihis">
+  <param n="networkTier" t="string"><![CDATA[]]></param>
+  <param n="elementName" t="string"><![CDATA[]]></param>
+  <param n="path" t="string"><![CDATA[]]></param>
+  <param n="environment" t="string"><![CDATA[]]></param>
+  <param n="institutionCluster" t="string"><![CDATA[]]></param>
+  <script encoded="false"><![CDATA[var cat = Server.getConfigurationElementCategoryWithPath(path)
+var configEls = cat.configurationElements
+var values = new Array()
+var attr = ""
+
+if(networkTier != "" && networkTier != null){
+    for each(var c in configEls) {
+        if(c.name == elementName){
+            if(institutionCluster == "COMMON"){
+
+                attr =  c.getAttributeWithKey("COMMON")
+
+                if(environment != "P" && environment != "R")
+                    attr =  c.getAttributeWithKey("NODB") 
+                
+                if(networkTier != "WEB")
+                    attr =  c.getAttributeWithKey("NODB") 
+            }
+            else if((environment == "P" || environment == "R") && networkTier == "DB"){
+                attr =  c.getAttributeWithKey("DB") //intranet
+            }
+            else if(networkTier == "DB"){
+                attr =  c.getAttributeWithKey("NODB" )// internet/intranet
+            }    
+            else if(networkTier != "DB"){
+                attr =  c.getAttributeWithKey("ALL") //internet/intranet/dmz
+            } 
+
+            values = attr.value
+            break
+        }
+
+    }
+
+}
+
+//System.log(values)
+return values
+
+]]></script>
+</dunes-script-module>

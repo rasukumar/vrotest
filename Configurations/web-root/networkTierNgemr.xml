@@ -1,0 +1,21 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<config-element id="81455ce7-5d5c-4a14-99a6-5a0019c1f96c" version="0.0.0">
+  <display-name><![CDATA[networkTierNgemr]]></display-name>
+  <atts>
+    <att name="P" type="Array/string" read-only="false">
+      <value encoded="n"><![CDATA[[13:string#WEBAPP,9:string#DB]]]></value>
+    </att>
+    <att name="S" type="Array/string" read-only="false">
+      <value encoded="n"><![CDATA[[10:string#WEB]]]></value>
+    </att>
+    <att name="D" type="Array/string" read-only="false">
+      <value encoded="n"><![CDATA[[10:string#WEB]]]></value>
+    </att>
+    <att name="Z" type="Array/string" read-only="false">
+      <value encoded="n"><![CDATA[[10:string#WEB]]]></value>
+    </att>
+    <att name="R" type="Array/string" read-only="false">
+      <value encoded="n"><![CDATA[[13:string#WEBAPP,9:string#DB]]]></value>
+    </att>
+  </atts>
+</config-element>

@@ -1,0 +1,82 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dunes-script-module name="returnVmZoneTag" result-type="string" api-version="6.0.0" id="e229c340-0cfa-4fe8-8900-ecfbf3ae3daa" version="0.0.0" allowed-operations="vfe" category-name="com.vmware.ihis">
+  <param n="vmClusterType" t="string"><![CDATA[]]></param>
+  <param n="environment" t="string"><![CDATA[]]></param>
+  <param n="project" t="string"><![CDATA[]]></param>
+  <param n="location" t="string"><![CDATA[]]></param>
+  <param n="networkTier" t="string"><![CDATA[]]></param>
+  <param n="networkZone" t="string"><![CDATA[]]></param>
+  <script encoded="false"><![CDATA[
+var tag = ""
+var cat = Server.getConfigurationElementCategoryWithPath("web-root")
+var configEls = cat.configurationElements
+var projectNm = ""
+
+if(project != null && vmClusterType != null){
+    // get project name from id
+    for each(var configEl in configEls) {
+        if(configEl.name == "projectIdToName"){
+            var attrs =  configEl.attributes
+            for each (var attr in attrs){
+                    if(attr.value == project)
+                        projectNm = attr.name
+
+            }
+        }
+    }
+        
+    var type = vmClusterType.split(" ")[1]
+    var env = ""
+
+    if(vmClusterType.indexOf("Mission Critical") != -1){
+        type = "CRI"
+    }
+
+    if(vmClusterType.indexOf("Standard") != -1){
+        type = "STD"
+    }
+
+    if(networkTier == "DB"){
+        type = "DB"
+    }
+
+    if(projectNm == "COMMON"){
+        if(location == "FRT")
+            type = "FRT"
+        else type = "AMK"
+
+         if(vmClusterType.indexOf("Stretched") != -1){
+            type = "STR"
+        }
+    }    
+
+    if(projectNm == "INFRA"){
+        if(location == "FRT")
+            type = "FRT"
+        else type = "AMK"
+
+         if(vmClusterType.indexOf("Stretched") != -1){
+            type = "STR"
+        }
+    }
+
+    if(environment == "P")
+        env = "Prod"
+    else if(environment == "R")
+        env = "DR"
+    else env = "NonProd"
+
+    // for COMMON
+    if(projectNm == "COMMON" && networkZone == "ENZ")
+        env = "ENZ"
+
+    if(projectNm == "COMMON" && networkZone == "DMZ")
+        env = "DMZ" 
+        
+    tag = "HDC-"+projectNm +"-"+type+"-"+env+"-Zone"
+    System.log("VM Cluster type tag: "+tag)
+   
+}
+
+ return tag]]></script>
+</dunes-script-module>

@@ -1,0 +1,27 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dunes-script-module name="readConfigElementAttributes" result-type="Array/string" api-version="6.0.0" id="fcedb430-04e9-45d3-90ca-5b9c9631ccce" version="0.0.0" allowed-operations="vfe" category-name="com.vmware.ihis">
+  <param n="elementName" t="string"><![CDATA[]]></param>
+  <param n="path" t="string"><![CDATA[]]></param>
+  <script encoded="false"><![CDATA[var attr = new Array()
+var attrNames = new Array()
+var cat = Server.getConfigurationElementCategoryWithPath(path)
+var configEls = cat.configurationElements
+var values = new Array()
+
+if(elementName != null || elementName != ""){
+    for each(var c in configEls) {
+        if(c.name == elementName){
+            attr = c.attributes
+            break
+        }
+    }
+
+    for each(var a in attr){
+        attrNames.push(a.name)
+
+    }    
+
+}
+
+ return attrNames]]></script>
+</dunes-script-module>

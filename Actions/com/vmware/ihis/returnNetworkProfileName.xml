@@ -1,0 +1,38 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dunes-script-module name="returnNetworkProfileName" result-type="string" api-version="6.0.0" id="488e5c18-d264-4b4e-9320-e81ec4c50e31" version="0.0.0" allowed-operations="vfe" category-name="com.vmware.ihis">
+  <param n="location" t="string"><![CDATA[]]></param>
+  <param n="networkTier" t="string"><![CDATA[]]></param>
+  <param n="networkZone" t="string"><![CDATA[]]></param>
+  <param n="project" t="string"><![CDATA[]]></param>
+  <param n="environment" t="string"><![CDATA[]]></param>
+  <script encoded="false"><![CDATA[
+var cat = Server.getConfigurationElementCategoryWithPath("web-root")
+var configEls = cat.configurationElements
+var networkProfile = ""
+
+var projectNm = ""
+
+if(project != null && project != ""){
+    // get project name from id
+    for each(var configEl in configEls) {
+        if(configEl.name == "projectIdToName"){
+            var attrs =  configEl.attributes
+            for each (var attr in attrs){
+                    if(attr.value == project){
+                        projectNm = attr.name
+                        break;
+                    }    
+            }
+        }
+    }
+    
+    if(environment == "P" || environment == "R")
+        environment = "Prod"
+    else environment = "NonProd"
+
+    networkProfile = projectNm+"-"+networkTier+"-"+networkZone+"-"+environment+"-"+location
+
+} 
+
+return networkProfile]]></script>
+</dunes-script-module>

@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:workflow xmlns:ns2="http://vmware.com/vco/workflow" root-name="item2" object-name="workflow:name=generic" id="4e023689-e9ea-4dc7-98f7-c422ffa128da" editor-version="2.0" version="0.0.0" api-version="6.0.0" restartMode="1" resumeFromFailedMode="0">
+    <display-name>Create New Datastore</display-name>
+    <description>Create New Datastore to the host</description>
+    <position y="50.0" x="100.0"/>
+    <input>
+        <param name="host" type="VC:HostSystem">
+            <description>Select Host</description>
+        </param>
+        <param name="vmfsVersion" type="number">
+            <description>Select VMFS Version</description>
+        </param>
+        <param name="datastoreName" type="string">
+            <description>Enter datastore name</description>
+        </param>
+    </input>
+    <output/>
+    <attrib name="errMessage" type="string">
+        <value encoded="n"></value>
+        <description>Error Message</description>
+    </attrib>
+    <attrib name="allDevicePath" type="Array/Any">
+        <value encoded="n">[]</value>
+    </attrib>
+    <workflow-item name="item0" type="end" end-mode="0" comparator="0">
+        <in-binding/>
+        <out-binding/>
+        <position y="50.0" x="410.0"/>
+    </workflow-item>
+    <workflow-item name="item1" out-name="item0" throw-bind-name="errMessage" type="task" comparator="0">
+        <display-name>Scriptable task</display-name>
+        <script encoded="false">if (vmfsVersion != 6 &amp;&amp; vmfsVersion != 5) {&#13;
+    throw "Invalid VMFS version " + vmfsVersion;&#13;
+}&#13;
+var hostDatastoreSystem = VcPlugin.convertToVimManagedObject(host, host.configManager.datastoreSystem);&#13;
+try {&#13;
+    var devicePath = allDevicePath[0];&#13;
+    // Compute the size of the disk in GB&#13;
+    &#13;
+    // Generate the volume name&#13;
+    var volumeName = devicePath.substring(devicePath.lastIndexOf("/") + 1).replace(new RegExp(":", "g"), "_");&#13;
+&#13;
+    // Log the creation&#13;
+    System.log("\tA datastore for disk.devicePath : '" + devicePath + "' GB, name : '" + volumeName + "')");&#13;
+    Server.log("A datastore will be created", "devicePath : '" + devicePath + "' GB, name : '" + volumeName + "'");&#13;
+&#13;
+    // Query the available datastore create options &#13;
+    vmfsDsCreateOptions = hostDatastoreSystem.queryVmfsDatastoreCreateOptions(devicePath, vmfsVersion);&#13;
+   Server.log("vmfsDsCreateOptions" + vmfsDsCreateOptions);&#13;
+&#13;
+    // Set the datastore name to the disk name&#13;
+    vmfsDsCreateOptions[0].spec.vmfs.volumeName = datastoreName;&#13;
+    var createdDs = hostDatastoreSystem.createVmfsDatastore( vmfsDsCreateOptions[0].spec );&#13;
+}&#13;
+catch (ex) {&#13;
+    System.error("Unable to create the datastore. Reason: " + ex);&#13;
+    Server.error("Unable to create the datastore. Reason: " + ex);&#13;
+}&#13;
+</script>
+        <in-binding>
+            <bind name="vmfsVersion" type="number" export-name="vmfsVersion"/>
+            <bind name="allDevicePath" type="Array/Any" export-name="allDevicePath"/>
+            <bind name="datastoreName" type="string" export-name="datastoreName"/>
+            <bind name="host" type="VC:HostSystem" export-name="host"/>
+        </in-binding>
+        <out-binding/>
+        <description>Simple task with custom script capability.</description>
+        <position y="60.0" x="260.0"/>
+    </workflow-item>
+    <workflow-item name="item2" out-name="item1" type="task" comparator="0">
+        <display-name>Scriptable task</display-name>
+        <script encoded="false">allDevicePath = new Array();&#13;
+&#13;
+var hostStorageSystem = VcPlugin.convertToVimManagedObject( host, host.configManager.storageSystem );&#13;
+hostStorageSystem.rescanAllHba();&#13;
+hostStorageSystem.rescanVmfs();&#13;
+hostStorageSystem.refreshStorageSystem();&#13;
+&#13;
+var hostDatastoreSystem = VcPlugin.convertToVimManagedObject(host, host.configManager.datastoreSystem);&#13;
+&#13;
+// Get available disks&#13;
+var freeDisks = hostDatastoreSystem.queryAvailableDisksForVmfs();&#13;
+if (freeDisks != null &amp;&amp; freeDisks.length &gt; 0) {&#13;
+    System.log("Found " + freeDisks.length + " available disks for VMFS creation:");&#13;
+    for each(disk in freeDisks) {&#13;
+        try {&#13;
+            devicePath = disk.devicePath;&#13;
+            // Compute the size of the disk in GB&#13;
+            var size = (disk.capacity.block * disk.capacity.blockSize) / 1024 / 1024 / 1024;&#13;
+&#13;
+            // Generate the volume name&#13;
+            var volumeName = devicePath.substring(devicePath.lastIndexOf("/") + 1).replace(new RegExp(":", "g"), "_");&#13;
+&#13;
+            // Log the creation&#13;
+            System.log("\tA datastore for disk.devicePath : '" + devicePath + "' will be created (capacity : " + size + " GB, name : '" + volumeName + "')");&#13;
+            Server.log("A datastore will be created", "devicePath : '" + devicePath + "' - capacity : " + size + " GB, name : '" + volumeName + "'");&#13;
+&#13;
+            allDevicePath.push(devicePath);&#13;
+        }&#13;
+		catch(ex) {&#13;
+            System.error("Unable to create the datastore. Reason: " + ex);&#13;
+            Server.error("Unable to create the datastore. Reason: " + ex);&#13;
+        }&#13;
+    }&#13;
+}&#13;
+else {&#13;
+    System.log("No available disk found");&#13;
+}&#13;
+</script>
+        <in-binding>
+            <bind name="host" type="VC:HostSystem" export-name="host"/>
+        </in-binding>
+        <out-binding>
+            <bind name="allDevicePath" type="Array/Any" export-name="allDevicePath"/>
+        </out-binding>
+        <description>Simple task with custom script capability.</description>
+        <position y="60.0" x="155.0"/>
+    </workflow-item>
+    <presentation/>
+</ns2:workflow>

@@ -1,0 +1,18 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dunes-script-module name="returnConfigElementValues" result-type="Array/string" api-version="6.0.0" id="46cced1a-9b81-460a-a80c-fc4e2bd3fd9f" version="0.0.0" allowed-operations="vfe" category-name="com.vmware.ihis">
+  <param n="inputCategory" t="string"><![CDATA[]]></param>
+  <script encoded="false"><![CDATA[var cat = Server.getConfigurationElementCategoryWithPath("web-root")
+var configEls = cat.configurationElements
+var values = new Array()
+for each(var c in configEls) {
+    if(c.name == "requestFormValues"){
+        var attr =  c.getAttributeWithKey(inputCategory)
+        values = attr.value
+        break
+    }
+
+}
+//System.log(values)
+return values
+]]></script>
+</dunes-script-module>

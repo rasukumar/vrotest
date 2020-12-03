@@ -1,0 +1,19 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<config-element id="12b67fa3-6704-44e5-a8a0-e3bb98de2625" version="0.0.0">
+  <display-name><![CDATA[networkZone]]></display-name>
+  <atts>
+    <att name="DB" type="Array/string" read-only="false">
+      <value encoded="n"><![CDATA[[15:string#Intranet]]]></value>
+    </att>
+    <att name="ALL" type="Array/string" read-only="false">
+      <value encoded="n"><![CDATA[[15:string#Internet,15:string#Intranet,10:string#DMZ]]]></value>
+    </att>
+    <att name="NODB" type="Array/string" read-only="false">
+      <value encoded="n"><![CDATA[[15:string#Internet,15:string#Intranet]]]></value>
+      <description><![CDATA[Non-Prod DB can have Intranet & internet network zone]]></description>
+    </att>
+    <att name="COMMON" type="Array/string" read-only="false">
+      <value encoded="n"><![CDATA[[15:string#Internet,15:string#Intranet,10:string#ENZ,10:string#DMZ]]]></value>
+    </att>
+  </atts>
+</config-element>

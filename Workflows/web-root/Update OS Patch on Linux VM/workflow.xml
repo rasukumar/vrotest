@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:workflow xmlns:ns2="http://vmware.com/vco/workflow" root-name="item5" object-name="workflow:name=generic" id="0186d4a7-5e40-44f4-a457-7375d86649e0" editor-version="2.0" version="0.0.0" api-version="6.0.0" allowed-operations="vef" restartMode="1" resumeFromFailedMode="0">
+    <display-name>Update OS Patch on Linux VM</display-name>
+    <description>This workflow is to Update OS Patch on Linux VM by registering VM in to satellite server  </description>
+    <position y="50.0" x="20.0"/>
+    <input>
+        <param name="inputProperties" type="Properties"/>
+    </input>
+    <output/>
+    <attrib name="vmUsername" type="string" conf-id="37abddc7-c093-4fed-857b-38273fe27da5" conf-key="linuxUsername"/>
+    <attrib name="vmPassword" type="SecureString" conf-id="37abddc7-c093-4fed-857b-38273fe27da5" conf-key="linuxPassword"/>
+    <attrib name="interactiveSession" type="boolean">
+        <value encoded="n">false</value>
+    </attrib>
+    <attrib name="programPath" type="string">
+        <value encoded="n">/bin/nmcli</value>
+    </attrib>
+    <attrib name="workingDirectory" type="string">
+        <value encoded="n"></value>
+    </attrib>
+    <attrib name="environment" type="Array/string">
+        <value encoded="n">[]</value>
+    </attrib>
+    <attrib name="arguments" type="Array/string">
+        <value encoded="n">[]</value>
+    </attrib>
+    <attrib name="wfRPIG" type="Workflow">
+        <value encoded="n">dunes://service.dunes.ch/Workflow?id='C98080808080808080808080808080805E80808001322751030482b80adf61e7c'&amp;dunesName='Workflow'</value>
+    </attrib>
+    <attrib name="vm" type="VC:VirtualMachine">
+        <value encoded="n"/>
+    </attrib>
+    <workflow-item name="item0" type="end" end-mode="0" comparator="0">
+        <in-binding/>
+        <out-binding/>
+        <position y="50.0" x="491.0"/>
+    </workflow-item>
+    <workflow-item name="item1" out-name="item4" type="task" comparator="0">
+        <display-name>Set commands for Update Patching</display-name>
+        <script encoded="false">
+arguments = new Array()
+
+// this command will help to Assign the license, and connect with capsule server
+cmd = 'subscription-manager register --org="Integrated_Health_Information_Systems_Pte_Ltd" --activationkey="RHEL7-License-Smart Mgmt-Premium-11533040" --force';
+arguments.push(cmd);
+
+// this command will help to clean all cached information
+// cmd = 'yum clean all';
+// arguments.push(cmd);
+
+// this command will help toshows all repositories
+// cmd = 'yum  repolist all';
+// arguments.push(cmd);
+
+// this command will help to update the latest patch from the satellite server
+cmd = 'yum update -y';
+arguments.push(cmd);
+
+// this command will help to Remove the license, and diconnect from the capsule server
+cmd = 'subscription-manager unregister';
+arguments.push(cmd);
+
+System.log(arguments)
+</script>
+        <in-binding/>
+        <out-binding>
+            <bind name="arguments" type="Array/string" export-name="arguments"/>
+        </out-binding>
+        <description>Simple task with custom script capability.</description>
+        <position y="60.0" x="211.0"/>
+    </workflow-item>
+    <workflow-item name="item4" out-name="item0" type="task" comparator="0">
+        <display-name>Run program in guest</display-name>
+        <script encoded="false">
+var inputs,currentToken =""
+System.log("execute commands in guest....")
+
+for each(var arg in arguments) {
+    System.log("Trying to Execute cmd : "+arg)
+    inputs = new Properties()
+    inputs.put("interactiveSession",interactiveSession)
+    inputs.put("workingDirectory",workingDirectory)
+    inputs.put("environment",environment)
+    inputs.put("programPath",programPath)
+    inputs.put("vmPassword",vmPassword)
+    inputs.put("vmUsername",vmUsername)
+    inputs.put("arguments",arg)
+    inputs.put("vm",vm)
+    currentToken = wfRPIG.execute(inputs)
+    System.sleep(10 * 1000)
+   System.getModule("com.vmware.ihis").wfState(currentToken);
+}
+</script>
+        <in-binding>
+            <bind name="wfRPIG" type="Workflow" export-name="wfRPIG"/>
+            <bind name="vmUsername" type="string" export-name="vmUsername"/>
+            <bind name="vmPassword" type="SecureString" export-name="vmPassword"/>
+            <bind name="interactiveSession" type="boolean" export-name="interactiveSession"/>
+            <bind name="programPath" type="string" export-name="programPath"/>
+            <bind name="workingDirectory" type="string" export-name="workingDirectory"/>
+            <bind name="environment" type="Array/string" export-name="environment"/>
+            <bind name="arguments" type="Array/string" export-name="arguments"/>
+            <bind name="vm" type="VC:VirtualMachine" export-name="vm"/>
+        </in-binding>
+        <out-binding/>
+        <description>Simple task with custom script capability.</description>
+        <position y="60.0" x="331.0"/>
+    </workflow-item>
+    <workflow-item name="item5" out-name="item1" type="task" comparator="0">
+        <display-name>Read VM Info from payload</display-name>
+        <script encoded="false">
+
+var jsontxt = JSON.stringify(inputProperties, null, 2)
+System.debug("jsontxt: " +jsontxt)
+var json = JSON.parse(jsontxt)
+System.log("parsed jsontxt: "+json)
+var vmName = json.resourceNames[0]
+System.log("vm name: "+vmName)
+
+vm = System.getModule("com.vmware.ihis").getVmFromVcenterByName(vmName);
+
+
+</script>
+        <in-binding>
+            <bind name="inputProperties" type="Properties" export-name="inputProperties"/>
+        </in-binding>
+        <out-binding>
+            <bind name="vm" type="VC:VirtualMachine" export-name="vm"/>
+        </out-binding>
+        <description>Simple task with custom script capability.</description>
+        <position y="60.0" x="91.0"/>
+    </workflow-item>
+    <presentation/>
+</ns2:workflow>

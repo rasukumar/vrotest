@@ -1,0 +1,21 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<config-element id="2dad0727-e19c-4fa2-bb80-aa4f25b302e7" version="0.0.0">
+  <display-name><![CDATA[domainsPerProject]]></display-name>
+  <atts>
+    <att name="NNA" type="Array/string" read-only="false">
+      <value encoded="n"><![CDATA[[16:string#Nhg.local,16:string#Aic.local,23:string#Healthgrp.com.sg,30:string#Hcloud.healthgrp.com.sg]]]></value>
+    </att>
+    <att name="SHS" type="Array/string" read-only="false">
+      <value encoded="n"><![CDATA[[22:string#Ses.shsu.com.sg]]]></value>
+    </att>
+    <att name="INFRA" type="Array/string" read-only="false">
+      <value encoded="n"><![CDATA[[23:string#Healthgrp.com.sg,30:string#Hcloud.healthgrp.com.sg]]]></value>
+    </att>
+    <att name="COMMON" type="Array/string" read-only="false">
+      <value encoded="n"><![CDATA[[26:string#Devhealthgrp.com.sg,27:string#Healthgrpexts.com.sg,27:string#Healthgrpextp.com.sg,26:string#Sechealthgrp.com.sg,23:string#Healthgrp.com.sg,26:string#Exthealthgrp.com.sg]]]></value>
+    </att>
+    <att name="NGEMR" type="Array/string" read-only="false">
+      <value encoded="n"><![CDATA[[23:string#Healthgrp.com.sg]]]></value>
+    </att>
+  </atts>
+</config-element>

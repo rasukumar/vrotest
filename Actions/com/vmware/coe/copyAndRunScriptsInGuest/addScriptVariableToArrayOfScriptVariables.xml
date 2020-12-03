@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dunes-script-module name="addScriptVariableToArrayOfScriptVariables" result-type="Array/CompositeType(stringToReplace:string,replacingString:string):scriptVariables" api-version="6.0.0" id="4cea6fed-8833-4b33-878d-8a4d8e5665ad" version="0.0.1" allowed-operations="evf" category-name="com.vmware.coe.copyAndRunScriptsInGuest">
+  <param n="scriptVariables" t="Array/CompositeType(stringToReplace:string,replacingString:string):scriptVariables"><![CDATA[]]></param>
+  <param n="stringToReplace" t="string"><![CDATA[]]></param>
+  <param n="replacingString" t="string"><![CDATA[]]></param>
+  <script encoded="false"><![CDATA[if (scriptVariables == null) scriptVariables = new Array();
+
+var p = new Properties();
+p.put("stringToReplace", stringToReplace);
+p.put("replacingString", replacingString);
+
+scriptVariables.push(p);
+
+return scriptVariables;]]></script>
+</dunes-script-module>

@@ -1,0 +1,30 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<config-element id="eda0d038-d910-476e-9e97-8b62ff718642" version="0.0.0">
+  <display-name><![CDATA[ouSelectionNhg]]></display-name>
+  <atts>
+    <att name="NhgWindows2008NonProd" type="string" read-only="false">
+      <value encoded="n"><![CDATA[OU=Windows2008,OU=Staging,OU=Hardened,OU=Hcloud,DC=Nhg,DC=local]]></value>
+    </att>
+    <att name="NhgWindows2008Prod" type="string" read-only="false">
+      <value encoded="n"><![CDATA[OU=Windows2008,OU=Production,OU=Hardened,OU=HCloud,DC=Nhg,DC=local]]></value>
+    </att>
+    <att name="NhgWindows2012NonProd" type="string" read-only="false">
+      <value encoded="n"><![CDATA[OU=Windows2012,OU=Staging,OU=Hardened,OU=Hcloud,DC=Nhg,DC=local]]></value>
+    </att>
+    <att name="NhgWindows2012Prod" type="string" read-only="false">
+      <value encoded="n"><![CDATA[OU=Windows2012,OU=Production,OU=Hardened,OU=Hcloud,DC=Nhg,DC=local]]></value>
+    </att>
+    <att name="NhgWindows2016NonProd" type="string" read-only="false">
+      <value encoded="n"><![CDATA[OU=Windows2016,OU=Staging,OU=Hardened,OU=Hcloud,DC=Nhg,DC=local]]></value>
+    </att>
+    <att name="NhgWindows2016Prod" type="string" read-only="false">
+      <value encoded="n"><![CDATA[OU=Windows2016,OU=Production,OU=Hardened,OU=Hcloud,DC=Nhg,DC=local]]></value>
+    </att>
+    <att name="NhgWindows2019NonProd" type="string" read-only="false">
+      <value encoded="n"><![CDATA[OU=Windows2019,OU=Staging,OU=Hardened,OU=Hcloud,DC=Nhg,DC=local]]></value>
+    </att>
+    <att name="NhgWindows2019Prod" type="string" read-only="false">
+      <value encoded="n"><![CDATA[OU=Windows2019,OU=Production,OU=Hardened,OU=Hcloud,DC=Nhg,DC=local]]></value>
+    </att>
+  </atts>
+</config-element>

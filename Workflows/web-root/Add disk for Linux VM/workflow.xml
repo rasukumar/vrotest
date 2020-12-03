@@ -1,0 +1,200 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<workflow xmlns="http://vmware.com/vco/workflow" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://vmware.com/vco/workflow http://vmware.com/vco/workflow/Workflow-v4.xsd" root-name="item16" object-name="workflow:name=generic" id="bf9a3e70-5f06-42d6-9714-da84789b5a2b" version="0.0.0" api-version="6.0.0" allowed-operations="evf" editor-version="2.0" restartMode="1" resumeFromFailedMode="0">
+  <display-name><![CDATA[Add disk for Linux VM]]></display-name>
+  <position y="1.05263157894737" x="22.10526315789474"/>
+  <input>
+    <param name="inputProperties" type="Properties"/>
+  </input>
+  <attrib name="vmPassword" type="SecureString" read-only="false" conf-id="37abddc7-c093-4fed-857b-38273fe27da5" conf-key="linuxPassword"/>
+  <attrib name="vmUsername" type="string" read-only="false" conf-id="37abddc7-c093-4fed-857b-38273fe27da5" conf-key="linuxUsername">
+    <value encoded="n"><![CDATA[]]></value>
+  </attrib>
+  <attrib name="result" type="Array/number" read-only="false">
+    <value encoded="n"><![CDATA[#{##}#]]></value>
+  </attrib>
+  <attrib name="counter" type="number" read-only="false">
+    <value encoded="n"><![CDATA[1.0]]></value>
+  </attrib>
+  <attrib name="wfAddHD" type="Workflow" read-only="false">
+    <value encoded="n"><![CDATA[dunes://service.dunes.ch/Workflow?id='93f2ca68-9018-416e-80d2-6e2a7e7991b1'&dunesName='Workflow']]></value>
+  </attrib>
+  <attrib name="vm" type="VC:VirtualMachine" read-only="false">
+    <value encoded="n"><![CDATA[]]></value>
+  </attrib>
+  <attrib name="disks" type="Array/Any" read-only="false">
+    <value encoded="n"><![CDATA[#{##}#]]></value>
+  </attrib>
+  <attrib name="diskSize" type="Array/number" read-only="false">
+    <value encoded="n"><![CDATA[#{##}#]]></value>
+  </attrib>
+  <attrib name="mountPoint" type="Array/string" read-only="false">
+    <value encoded="n"><![CDATA[#{##}#]]></value>
+  </attrib>
+  <attrib name="ipAddress" type="string" read-only="false">
+    <value encoded="n"><![CDATA[]]></value>
+  </attrib>
+  <workflow-item name="item0" type="end" end-mode="0">
+    <position y="46.68134685206353" x="662.8568139900649"/>
+  </workflow-item>
+  <workflow-item name="item7" out-name="item17" type="custom-condition" alt-out-name="item8">
+    <display-name><![CDATA[Validate tools status]]></display-name>
+    <script encoded="false"><![CDATA[System.log("VC VM: "+vm)
+System.log("VC VM name: "+vm.name)
+
+var toolStatus = vm.guest.toolsStatus.value;
+if(String(toolStatus) == "toolsOk")
+return true;
+else
+return false; ]]></script>
+    <in-binding>
+      <bind name="vm" type="VC:VirtualMachine" export-name="vm"/>
+    </in-binding>
+    <out-binding/>
+    <description><![CDATA[Custom decision based on a custom script.]]></description>
+    <position y="50.18134685206353" x="279.99967113292206"/>
+  </workflow-item>
+  <workflow-item name="item8" out-name="item9" type="task">
+    <display-name><![CDATA[Error message]]></display-name>
+    <script encoded="false"><![CDATA[
+var errorMessage = "VMware Tools are not running";
+System.error("[Error::] "+ errorMessage); ]]></script>
+    <in-binding/>
+    <out-binding/>
+    <description><![CDATA[Simple task with custom script capability.]]></description>
+    <position y="123.34801351873017" x="337.1425282757792"/>
+  </workflow-item>
+  <workflow-item name="item9" prototype-id="increase-counter" out-name="item7" content-mode="x" type="task">
+    <display-name><![CDATA[Increase counter]]></display-name>
+    <script encoded="false"><![CDATA[//Auto-generated script
+counter = counter + 1;]]></script>
+    <in-binding>
+      <bind name="counter" type="number" export-name="counter">
+        <description><![CDATA[Item to increase]]></description>
+      </bind>
+    </in-binding>
+    <out-binding>
+      <bind name="counter" type="number" export-name="counter">
+        <description><![CDATA[Increased item]]></description>
+      </bind>
+    </out-binding>
+    <description><![CDATA[Increment a counter by one.]]></description>
+    <position y="123.34801351873017" x="241.904433037684"/>
+  </workflow-item>
+  <workflow-item name="item10" out-name="item0" type="task">
+    <display-name><![CDATA[Add disks]]></display-name>
+    <script encoded="false"><![CDATA[
+
+System.log("Adding disks to VM.....")
+
+var inputs = new Properties()
+var token = ""
+for each(var d in diskSize){
+	inputs.put("vm",vm)
+	inputs.put("diskSize",Number(d))
+	token = wfAddHD.execute(inputs)
+	System.getModule("org.VMware.PSO").wfstate(token)
+} 
+ 
+]]></script>
+    <in-binding>
+      <bind name="vm" type="VC:VirtualMachine" export-name="vm"/>
+      <bind name="wfAddHD" type="Workflow" export-name="wfAddHD"/>
+      <bind name="diskSize" type="Array/number" export-name="diskSize"/>
+    </in-binding>
+    <out-binding/>
+    <description><![CDATA[Simple task with custom script capability.]]></description>
+    <position y="120.0" x="420.0"/>
+  </workflow-item>
+  <workflow-item name="item16" out-name="item19" type="task">
+    <display-name><![CDATA[Read from payload]]></display-name>
+    <script encoded="false"><![CDATA[
+
+var jsontxt = JSON.stringify(inputProperties, null, 2)
+System.log("jsontxt: " +jsontxt)
+var json = JSON.parse(jsontxt)
+System.log("parsed jsontxt: "+json)
+var vmName = json.resourceNames[0]
+System.log("vm name: "+vmName)
+ipAddress = json.addresses[0][0]
+System.log("IP Address: "+ipAddress)
+
+vm =  System.getModule("com.vmware.ihis").getVmFromVcenterByName(vmName);
+]]></script>
+    <in-binding>
+      <bind name="inputProperties" type="Properties" export-name="inputProperties"/>
+    </in-binding>
+    <out-binding>
+      <bind name="vm" type="VC:VirtualMachine" export-name="vm"/>
+      <bind name="ipAddress" type="string" export-name="ipAddress"/>
+    </out-binding>
+    <description><![CDATA[Simple task with custom script capability.]]></description>
+    <position y="60.0" x="40.0"/>
+  </workflow-item>
+  <workflow-item name="item17" out-name="item10" type="task">
+    <display-name><![CDATA[Read disk details]]></display-name>
+    <script encoded="false"><![CDATA[
+System.log("Read disk/s details from payload.....")
+
+var custProp = inputProperties.get('customProperties')
+var disks = JSON.parse(custProp.get('disks'))
+System.log("disks from custom props:"+disks)
+
+mountPoint = new Array()
+diskSize = new Array()
+
+for each (var disk in disks)
+{
+    diskSize.push(disk.size)
+    mountPoint.push(disk.mountPoint)
+}
+System.log("mount Point: "+mountPoint)
+System.log("disk Sizes: "+diskSize)
+ 
+ 
+]]></script>
+    <in-binding>
+      <bind name="inputProperties" type="Properties" export-name="inputProperties"/>
+    </in-binding>
+    <out-binding>
+      <bind name="diskSize" type="Array/number" export-name="diskSize"/>
+      <bind name="mountPoint" type="Array/string" export-name="mountPoint"/>
+    </out-binding>
+    <description><![CDATA[Simple task with custom script capability.]]></description>
+    <position y="60.0" x="440.0"/>
+  </workflow-item>
+  <workflow-item name="item18" type="end" end-mode="0">
+    <position y="113.33333333333331" x="75.23809523809524"/>
+  </workflow-item>
+  <workflow-item name="item19" out-name="item7" type="custom-condition" alt-out-name="item20">
+    <display-name><![CDATA[Additional disks?]]></display-name>
+    <script encoded="false"><![CDATA[
+
+var custProp = inputProperties.get('customProperties')
+var disks = JSON.parse(custProp.get('disks'))
+System.log("disks from custom props:"+disks)
+System.log("disks length:"+disks.length)
+
+if(disks.length > 0)
+    return true;
+else 
+    return false;
+
+]]></script>
+    <in-binding>
+      <bind name="inputProperties" type="Properties" export-name="inputProperties"/>
+    </in-binding>
+    <out-binding/>
+    <description><![CDATA[Custom decision based on a custom script.]]></description>
+    <position y="45.66666666666666" x="148.52380952380952"/>
+  </workflow-item>
+  <workflow-item name="item20" out-name="item18" type="task">
+    <display-name><![CDATA[Scriptable task]]></display-name>
+    <script encoded="false"><![CDATA[
+System.log("No additional disks to add.")]]></script>
+    <in-binding/>
+    <out-binding/>
+    <description><![CDATA[Simple task with custom script capability.]]></description>
+    <position y="123.33333333333331" x="148.52380952380952"/>
+  </workflow-item>
+  <presentation/>
+</workflow>
