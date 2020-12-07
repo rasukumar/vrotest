@@ -1,21 +1,10 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<dunes-script-module name="getAllHostSystemsOfCluster" result-type="Array/VC:HostSystem" api-version="6.0.0" id="b74fac06-0e18-4916-936f-ec6fcdf1f896" version="1.0.1" category-name="com.vmware.ihis.xaas">
+<dunes-script-module name="getAllHostSystemsOfCluster" result-type="Array/VC:HostSystem" api-version="6.0.0" id="b74fac06-0e18-4916-936f-ec6fcdf1f896" version="1.0.2" category-name="com.vmware.ihis.xaas">
   <description><![CDATA[Return all the host system in a cluster]]></description>
   <param n="cluster" t="VC:ClusterComputeResource"><![CDATA[]]></param>
   <script encoded="false"><![CDATA[try {
 
-    var filter = System.getContext().getParameter("__filter");
-    var result = cluster.host;;
-    if (result == null) {
-        return result;
-    }
-    var filteredResult = [];
-    for each( var item in result) {
-        if(item.name.indexOf(filter) > -1) {
-            filteredResult.push(item);
-        }
-    }
-return filteredResult;
+    return cluster.host;
 
 } catch (ex) {
     return null;
